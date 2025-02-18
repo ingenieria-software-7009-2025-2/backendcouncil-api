@@ -1,0 +1,74 @@
+{\Large \color{Naranja}Requerimientos del sistema}
+
+\begin{itemize}[label=\textcolor{Lotus}{$\triangleright$}]
+    \item {
+        {\large \color{Purpura}Requerimientos funcionales}
+
+        % Detallar las funcionalidades principales del sistema.
+        % Incluir casos de uso esenciales y casos propuestos por el equipo.
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%
+        % Aqui empieza a escribir
+
+        % Mariana
+        \textbf{RF1: Autenticación de Usuarios}
+        \begin{itemize}[label=\textcolor{Amarillo}{$\triangleright$}]
+        \item La aplicación permite el acceso de usuarios mediante credenciales únicas: usuario y contraseña.
+        \item Hay autentificación para acceder como usuario (ciudadano) o administrador. 
+        \end{itemize} 
+        \textbf{RF2: Gestión de Usuarios}
+        \begin{itemize}[label=\textcolor{Amarillo}{$\triangleright$}]
+        \item Los usuarios podrán crear, editar y eliminar su perfil. 
+        \item Los administradores podrán eliminar las cuentas de los usuarios y ver sus datos. A su vez estos tendrán su propia cuenta. 
+        \end{itemize}
+        \textbf{RF3: Visualización de Incidentes}
+        \begin{itemize}[label=\textcolor{Amarillo}{$\triangleright$}] % EN REVISION 2 ESTADOS VISIBLES, RESUELTO VISIBLE MOMENTANEAMENTE
+        \item Los incidentes tendrán 3 estados: reportado, en revisión y resueltos 
+        \item Los incidentes se verán en el mapa interactivo según su ubicación, estos tendrán un icono correspondiente a su tipo. 
+        \item Los usuarios pueden hacer clic en el ícono de un incidente y ver detalles sobre este.
+        \end{itemize}
+        
+        \textbf{RF4: Gestión de Incidentes}
+        \begin{itemize}[label=\textcolor{Amarillo}{$\triangleright$}]
+        \item El sistema debe permitir a los usuarios registrar un incidente, para esto se pedirá la siguiente información obligatoriamente:
+        \begin{itemize} [label=\textcolor{Amarillo}{$\triangleright$}]
+            \item Tipo del incidente, esta será una selección de los tipos predeterminados: baches, luminarias descompuestas, obstáculos en la vía pública, accidentes automovilísticos, otro.
+            \item Descripción del incidente.
+            \item Fotos de prueba del incidente.
+            \item Ubicación, esta se podrá registrar manualmente (de forma escrita o seleccionando el punto en el mapa), o utilizando la ubicación en tiempo actual del usuario. 
+        \end{itemize}
+        \item Usuarios que mande pruebas de dicho incidente esté resuelto, el administrador podrá decidir, con ese o más reportes si cambiar el estado del incidente como resuelto.
+        \item Los incidentes se borrarán después de cierto tiempo cuando ya estén en el estado resuelto.
+        \item Los administradores deben recibir notificaciones de nuevos incidentes registrados.
+        \end{itemize}
+
+        \textbf{RF5: Filtro de incidentes}
+        \begin{itemize}[label=\textcolor{Amarillo}{$\triangleright$}]
+        \item Los usuarios podrán filtrar los incidentes en el mapa por su estado (Reportado, en revisión, resuelto) o por su tipo, fecha o estado. 
+        \end{itemize}
+    }
+    
+    \item {
+        {\large \color{Purpura}Requerimientos no funcionales}
+
+        % Seguridad, rendimiento, disponibilidad, usabilidad, entre otros (pueden considerar requerimientos de dominio).
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%
+        % Aqui empieza a escribir
+        \textbf{Seguridad:}\\
+        Definición de protocolo http, acceso restringido a la base de datos, protección de la rama main, los usuarios que reporten incidentes deben estar obligatoriamente registrados en la aplicación, solo administrador puede eliminar y cambiar el estado de cualquier incidente. 
+
+        \textbf{Usabilidad:}\\
+        Regulación de contenido, interfaz intuitiva y amigable con el usuario. 
+        
+        \textbf{Rendimineto:}\\
+        El sistema deberá soportar al menos 70 usuarios.\\
+        Los datos de incidentes son actualizados en tiempo real.\\
+        El procesado y subida de incidentes tarda 5 segundos en promedio.\\
+        Filtrar incidentes por tipo o tiempo demora aproximadamente de 10 segundos.\\
+        Encontrar incidentes cercanos tarda alrededor de de 20 segundos.
+
+        \textbf{Disponibilidad:}\\
+        El sistema deberá estar disponible el 99\% del tiempo.
+    }
+\end{itemize}
