@@ -1,0 +1,86 @@
+\definecolor{Negro2}{HTML}{44475A}
+\definecolor{Negro}{HTML}{282A36}
+\definecolor{Blanco_B}{HTML}{F8F8F2}
+\definecolor{Blanco}{HTML}{FFFFFF}
+\definecolor{Cian}{HTML}{8BE9FD}
+\definecolor{Verde}{HTML}{50FA7B}
+\definecolor{Naranja}{HTML}{FFB86C}
+\definecolor{Rosa}{HTML}{FF79C6}
+\definecolor{Purpura}{HTML}{BD93F9}
+\definecolor{Rojo}{HTML}{FF5555}
+\definecolor{Amarillo}{HTML}{F1FA8C}
+\definecolor{Comentario}{HTML}{6272A4}
+\definecolor{Extra}{HTML}{003670}
+\definecolor{Lotus}{HTML}{00ffbf}
+
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\sii}{\Longleftrightarrow}
+\newcommand{\qed}{\hfill $\blacksquare$}
+\newcommand{\tng}{\triangle}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Dom}{\text{Dom}}
+\newcommand{\Cod}{\text{Cod}}
+\newcommand{\nvec}[1]{\vec{\mathbf{#1}}}
+\newcommand{\uvec}[1]{\hat{\mathbf{#1}}}
+\newcommand{\ninf}[1]{\norm{\nvec{#1}}_\infty}
+\newcommand{\codeclass}[1]{\textrm{\textit{\textcolor{Rosa}{#1}}}}
+\newcommand{\codevar}[1]{\textrm{\textit{\textcolor{Cian}{#1}}}}
+\newcommand{\codemethod}[1]{\small{\textit{\textrm{\textcolor{Verde}{#1}}}}}
+\newcommand{\codeString}[1]{\textcolor{Amarillo}{#1}}
+
+\lstdefinestyle{mystyle}{
+    %©ccwebi
+    backgroundcolor=\color{Negro2},  
+    rulecolor=\color{Blanco},
+    commentstyle=\color{Gray},
+    keywordstyle=\color{Rosa},
+    escapebegin=\color{Lotus},
+    numberstyle=\tiny\color{Purpura},
+    stringstyle=\color{Amarillo},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=10pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4,
+    columns=flexible,
+    framexleftmargin=4pt,
+    framexrightmargin=4pt,
+}
+
+% Encabezados y pies de página
+
+% Diseño <<fancy>>
+\fancyhf{}
+
+% Encabezado
+\lhead[]{ % izquierda
+    \begin{tabular}{m{.75cm} m{4cm}}
+        \includegraphics[width=.75cm]{resources/Logo_FC_B.png} & {\color{Rosa}UNAM} 
+        
+        {\color{Rosa}Facultad de Ciencias } \\
+    \end{tabular}
+}
+
+\rhead[]{ % derecha
+    \begin{tabular}{>{\flushright \arraybackslash} m{6cm} m{.75cm}}
+        {\color{Cian}Ciencias de la Computación: \textit{\materia}} & \includegraphics[width=.75cm]{resources/Logo_UNAM_B.png} \\
+    \end{tabular}
+}
+%Pie de página
+
+\cfoot[]{ % center
+    {\color{Comentario}
+    \begin{tabular}{c c c}
+        $\boldsymbol{-}$ & \thepage & $\boldsymbol{-}$
+    \end{tabular}
+  }
+}
