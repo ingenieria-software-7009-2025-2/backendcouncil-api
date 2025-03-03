@@ -28,6 +28,7 @@ CREATE TABLE Administrador (
     Nombre VARCHAR(50),
     ApPaterno VARCHAR(50),
     ApMaterno VARCHAR(50),
+    Correo VARCHAR(50),
     Password VARCHAR(50)
 );
 
@@ -73,14 +74,16 @@ ALTER TABLE Foto ALTER COLUMN FotoID SET NOT NULL;
 ALTER TABLE Administrador ALTER COLUMN AdminID SET NOT NULL;
 ALTER TABLE Administrador ADD CONSTRAINT administrador_d1 CHECK (Nombre <> '');
 ALTER TABLE Administrador ADD CONSTRAINT administrador_d2 CHECK (ApPaterno <> '');
+ALTER TABLE Administrador ADD CONSTRAINT administrador_d3 CHECK (ApMaterno <> '');
+ALTER TABLE Administrador ADD CONSTRAINT administrador_d4 CHECK (Correo like '%_@_%._%');
 
 -- RESTRICCIONES TABLA CLIENTE 
 ALTER TABLE Cliente ALTER COLUMN ClienteID SET NOT NULL;
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d1 CHECK (Nombre <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d2 CHECK (ApPaterno <> '');
-ALTER TABLE Cliente ADD CONSTRAINT cliente_d3 CHECK (Correo like '%_@_%._%');
-
--- RESTRICCIONES TABLA CATEGORIA
+ALTER TABLE Cliente ADD CONSTRAINT cliente_d3 CHECK (ApMaterno <> '');
+ALTER TABLE Cliente ADD CONSTRAINT cliente_d4 CHECK (Correo like '%_@_%._%');
+o que la contraseña de agregamos que no sea null?-- RESTRICCIONES TABLA CATEGORIA
 ALTER TABLE Categoria ALTER COLUMN CategoriaID SET NOT NULL;
 ALTER TABLE Categoria ADD CONSTRAINT categoria_d1 CHECK (Categoria <> '');
 
@@ -126,3 +129,72 @@ ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (AdminID) RE
 ALTER TABLE Gestionar ADD CONSTRAINT fk_incidente_gestionar FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
     ON DELETE CASCADE ON UPDATE CASCADE;   
 
+---- DOCUMENTACIÓN ----
+
+COMMENT ON TYPE ESTADO IS 'Estados posibles de un Incidente';
+
+-- Incidente
+COMMENT ON TABLE Incidente IS 'Tabla que contiene los incidentes registrados.';
+COMMENT ON COLUMN Incidente.IncidenteID IS 'ID unico para identificar los accidentes.';
+COMMENT ON COLUMN Incidente.ClienteID IS 'Identificador unico proveniente del cliente.';
+COMMENT ON COLUMN Incidente.CategoriaID IS 'Identificador unico proveniente de la categoria.';
+COMMENT ON COLUMN Incidente.Nombre IS 'Nombre del incidente a registrar/ver.';
+COMMENT ON COLUMN Incidente.Description IS 'Descripcion del incidente a ver/registrar.';
+COMMENT ON COLUMN Incidente.Fecha IS 'Fecha del incidente.';
+COMMENT ON COLUMN Incidente.Hora IS 'Hora del incidente.';
+COMMENT ON COLUMN Incidente.Longitud IS 'Coordenada geográfica de longitud del incidente.';
+COMMENT ON COLUMN Incidente.Latitud IS 'Coordena geográfica de latitud del incidente.';
+COMMENT ON COLUMN Incidente.Estado IS 'Estado del incidente [Reportado,En revision,Resuelto].';
+COMMENT ON CONSTRAINT pk_incidente ON Incidente IS 'Llave primaria que identifica de manera única cada incidente en la tabla Incidente.';
+COMMENT ON CONSTRAINT fk_incidente_categoria ON Incidente IS 'Llave foránea que referencia la categoría del incidente.';
+COMMENT ON CONSTRAINT fk_incidente_cliente ON Incidente IS 'Llave foránea que referencia el cliente asociado al incidente.';
+
+-- Foto
+COMMENT ON TABLE Foto IS 'Tabla que contiene las fotos del incidente.';
+COMMENT ON COLUMN Foto.FotoID IS 'Identificador unico de la foto.';
+COMMENT ON COLUMN Foto.IncidenteID IS 'Identificador unico proveniente del incidente.';
+COMMENT ON CONSTRAINT pk_foto ON Foto IS 'Llave primaria que identifica una Foto.';
+COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foránea que referencia el Incidente al que retrata o se le es relevante la Foto'; 
+
+-- Administrador
+COMMENT ON TABLE Administrador IS 'Tabla que contiene los datos del administrador.';
+COMMENT ON COLUMN Administrador.AdministradorID IS 'Identificador unico del administrador.';
+COMMENT ON COLUMN Administrador.Nombre IS 'Nombre del administrador.';
+COMMENT ON COLUMN Administrador.ApPaterno IS 'Apellido paterno del administrador.';
+COMMENT ON COLUMN Administrador.ApMaterno IS 'Apellido Materno del administrador.';
+COMMENT ON COLUMN Administrador.Correo IS 'Correo registrado del administrador.';
+COMMENT ON COLUMN Administrador.Password IS 'Password registrada del administrador.';
+COMMENT ON CONSTRAINT pk_admin ON Administrador IS 'Llave primaria que identifica de manera única a cada administrador.';
+COMMENT ON CONSTRAINT administrador_d1 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Nombre, evitando cadena vacia';
+COMMENT ON CONSTRAINT administrador_d2 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Apellido Paterno, evitando cadena vacia';
+COMMENT ON CONSTRAINT administrador_d3 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Apellido Materno, evitando cadena vacia';
+COMMENT ON CONSTRAINT administrador_d4 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Correo, evitando cadena vacia';
+
+o
+--Cliente
+COMMENT ON TABLE Cliente IS 'Tabla que contiene los datos del cliente';
+COMMENT ON COLUMN Cliente.ClienteID IS 'Identificador unico del cliente.';
+COMMENT ON COLUMN Cliente.Nombre IS 'Nombre del cliente.';
+COMMENT ON COLUMN Cliente.ApPaterno IS 'Apellido paterno del cliente.';
+COMMENT ON COLUMN Cliente.ApMaterno IS 'Apellido materno del cliente.';
+COMMENT ON COLUMN Cliente.Correo IS 'Correo registrado del cliente.';
+COMMENT ON COLUMN Cliente.Password IS 'Passsword registrada del cliente.';
+COMMENT ON CONSTRAINT pk_cliente ON Cliente IS 'Llave primaria que identifica de manera unica a cada cliente.';
+COMMENT ON CONSTRAINT cliente_d1 ON Cliente IS 'Restriccion de longitud para la cadena recibida como Nombre, evitando cadena vacia';
+COMMENT ON CONSTRAINT cliente_d2 ON Cliente IS 'Restriccion de longitud para la cadena recibida como Apellido Paterno, evitando cadena vacia';
+COMMENT ON CONSTRAINT cliente_d3 ON Cliente IS 'Restriccion de longitud para la cadena recibida como Apellido Materno, evitando cadena vacia';
+COMMENT ON CONSTRAINT cliente_d4 ON Cliente IS 'Restriccion de longitud para la cadena recibida como Correo, evitando cadena vacia';
+
+-- Categoria
+COMMENT ON TABLE Categoria IS 'Tabla quecontiene las categorias de un incidente';
+COMMENT ON COLUMN Categoria.CategoriaID IS 'Identificador unico de la categoria';
+COMMENT ON COLUMN Categoria.Categoria IS 'Nombre de la categoria misma';
+COMMENT ON CONSTRAINT pk_categoria ON Categoria IS 'Llave primaria que identifica de manera unica cada categoria.';
+COMMENT ON CONSTRAINT categoria_d1 ON Categoria IS 'Restriccion de longitud para la cadena recibida como Categoria, evitando cadena vacia';
+
+-- Gestionar
+COMMENT ON TABLE Gestionar IS 'Tabla que guarda las relaciones entre Incidentes y su gestión por adminisradores';
+COMMENT ON COLUMN Gestionar.IncidenteID IS 'Identificador unico proveniente del incidente';
+COMMENT ON COLUMN Gestionar.AdministradorID IS 'Identificador unico proveniente del administrador';
+COMMENT ON CONSTRAINT fk_admin_gestionar ON Gestionar IS 'Llave foránea que referencia';
+COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que referencia';
