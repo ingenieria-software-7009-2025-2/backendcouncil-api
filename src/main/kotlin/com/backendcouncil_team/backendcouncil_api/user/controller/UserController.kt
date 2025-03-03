@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
  */
 @Controller
 @RequestMapping("/v1/users")
-class UserController(var userService: UserService) {
+class   UserController(var userService: UserService) {
 
     /**
      * Endpoint para registrar un nuevo usuario.
