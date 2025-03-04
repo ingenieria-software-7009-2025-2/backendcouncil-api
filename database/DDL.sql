@@ -1,4 +1,8 @@
--- Estados de un incidente 
+--Borrar base de datos para reinicio
+drop schema public cascade;
+create schema public;
+
+-- Estados de un incidente
 CREATE TYPE ESTADO AS ENUM('reportado','en revision','resuleto');
 
 -- Tabla para almacenar incidentes
@@ -77,13 +81,13 @@ ALTER TABLE Administrador ADD CONSTRAINT administrador_d2 CHECK (ApPaterno <> ''
 ALTER TABLE Administrador ADD CONSTRAINT administrador_d3 CHECK (ApMaterno <> '');
 ALTER TABLE Administrador ADD CONSTRAINT administrador_d4 CHECK (Correo like '%_@_%._%');
 
--- RESTRICCIONES TABLA CLIENTE 
+-- RESTRICCIONES TABLA CLIENTE
 ALTER TABLE Cliente ALTER COLUMN ClienteID SET NOT NULL;
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d1 CHECK (Nombre <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d2 CHECK (ApPaterno <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d3 CHECK (ApMaterno <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d4 CHECK (Correo like '%_@_%._%');
-o que la contraseña de agregamos que no sea null?-- RESTRICCIONES TABLA CATEGORIA
+-- RESTRICCIONES TABLA CATEGORIA
 ALTER TABLE Categoria ALTER COLUMN CategoriaID SET NOT NULL;
 ALTER TABLE Categoria ADD CONSTRAINT categoria_d1 CHECK (Categoria <> '');
 
@@ -114,20 +118,18 @@ ALTER TABLE Categoria ADD CONSTRAINT pk_categoria PRIMARY KEY (CategoriaID);
 ---- LLAVES FORANEAS ----
 
 -- LLAVES FORANEAS INCIDENTE
-ALTER TABLE Incidente ADD CONSTRAINT fk_incidente_categoria FOREIGN KEY (CategoriaID) REFERENCES Categoria(CategoriaID)
-    ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE Incidente ADD CONSTRAINT fk_incidente_cliente FOREIGN KEY (ClienteID) REFERENCES Cliente(ClienteID)
-    ON DELETE CASCADE ON UPDATE CASCADE;   
-   
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
 --LLAVES FORANEAS FOTO
 ALTER TABLE Foto ADD CONSTRAINT fk_foto_incidente FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
-    ON DELETE CASCADE ON UPDATE CASCADE;  
+    ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- LLAVES FORANEAS GESTIONAR
 ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (AdminID) REFERENCES Administrador(AdminID)
-    ON DELETE CASCADE ON UPDATE CASCADE;  
+    ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE Gestionar ADD CONSTRAINT fk_incidente_gestionar FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
-    ON DELETE CASCADE ON UPDATE CASCADE;   
+    ON DELETE CASCADE ON UPDATE CASCADE;
 
 ---- DOCUMENTACIÓN ----
 
@@ -139,14 +141,14 @@ COMMENT ON COLUMN Incidente.IncidenteID IS 'ID unico para identificar los accide
 COMMENT ON COLUMN Incidente.ClienteID IS 'Identificador unico proveniente del cliente.';
 COMMENT ON COLUMN Incidente.CategoriaID IS 'Identificador unico proveniente de la categoria.';
 COMMENT ON COLUMN Incidente.Nombre IS 'Nombre del incidente a registrar/ver.';
-COMMENT ON COLUMN Incidente.Description IS 'Descripcion del incidente a ver/registrar.';
+COMMENT ON COLUMN Incidente.Descripcion IS 'Descripcion del incidente a ver/registrar.';
 COMMENT ON COLUMN Incidente.Fecha IS 'Fecha del incidente.';
 COMMENT ON COLUMN Incidente.Hora IS 'Hora del incidente.';
 COMMENT ON COLUMN Incidente.Longitud IS 'Coordenada geográfica de longitud del incidente.';
 COMMENT ON COLUMN Incidente.Latitud IS 'Coordena geográfica de latitud del incidente.';
 COMMENT ON COLUMN Incidente.Estado IS 'Estado del incidente [Reportado,En revision,Resuelto].';
 COMMENT ON CONSTRAINT pk_incidente ON Incidente IS 'Llave primaria que identifica de manera única cada incidente en la tabla Incidente.';
-COMMENT ON CONSTRAINT fk_incidente_categoria ON Incidente IS 'Llave foránea que referencia la categoría del incidente.';
+--COMMENT ON CONSTRAINT fk_incidente_categoria ON Incidente IS 'Llave foránea que referencia la categoría del incidente.';
 COMMENT ON CONSTRAINT fk_incidente_cliente ON Incidente IS 'Llave foránea que referencia el cliente asociado al incidente.';
 
 -- Foto
@@ -154,11 +156,11 @@ COMMENT ON TABLE Foto IS 'Tabla que contiene las fotos del incidente.';
 COMMENT ON COLUMN Foto.FotoID IS 'Identificador unico de la foto.';
 COMMENT ON COLUMN Foto.IncidenteID IS 'Identificador unico proveniente del incidente.';
 COMMENT ON CONSTRAINT pk_foto ON Foto IS 'Llave primaria que identifica una Foto.';
-COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foránea que referencia el Incidente al que retrata o se le es relevante la Foto'; 
+COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foránea que referencia el Incidente al que retrata o se le es relevante la Foto';
 
 -- Administrador
 COMMENT ON TABLE Administrador IS 'Tabla que contiene los datos del administrador.';
-COMMENT ON COLUMN Administrador.AdministradorID IS 'Identificador unico del administrador.';
+COMMENT ON COLUMN Administrador.AdminID IS 'Identificador unico del administrador.';
 COMMENT ON COLUMN Administrador.Nombre IS 'Nombre del administrador.';
 COMMENT ON COLUMN Administrador.ApPaterno IS 'Apellido paterno del administrador.';
 COMMENT ON COLUMN Administrador.ApMaterno IS 'Apellido Materno del administrador.';
@@ -170,7 +172,6 @@ COMMENT ON CONSTRAINT administrador_d2 ON Administrador IS 'Restriccion de longi
 COMMENT ON CONSTRAINT administrador_d3 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Apellido Materno, evitando cadena vacia';
 COMMENT ON CONSTRAINT administrador_d4 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Correo, evitando cadena vacia';
 
-o
 --Cliente
 COMMENT ON TABLE Cliente IS 'Tabla que contiene los datos del cliente';
 COMMENT ON COLUMN Cliente.ClienteID IS 'Identificador unico del cliente.';
@@ -195,6 +196,9 @@ COMMENT ON CONSTRAINT categoria_d1 ON Categoria IS 'Restriccion de longitud para
 -- Gestionar
 COMMENT ON TABLE Gestionar IS 'Tabla que guarda las relaciones entre Incidentes y su gestión por adminisradores';
 COMMENT ON COLUMN Gestionar.IncidenteID IS 'Identificador unico proveniente del incidente';
-COMMENT ON COLUMN Gestionar.AdministradorID IS 'Identificador unico proveniente del administrador';
+COMMENT ON COLUMN Gestionar.AdminID IS 'Identificador unico proveniente del administrador';
 COMMENT ON CONSTRAINT fk_admin_gestionar ON Gestionar IS 'Llave foránea que referencia';
 COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que referencia';
+
+insert into categoria (categoriaid, categoria)
+values(246832,'baches');
