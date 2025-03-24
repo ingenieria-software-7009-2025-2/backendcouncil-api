@@ -37,7 +37,7 @@ CREATE TABLE Cliente (
     ApMaterno VARCHAR(100),
     Correo VARCHAR(50),
     Password VARCHAR(50),
-    Token VARCHAR(30)
+    Token VARCHAR(50)
 );
 
 -- Tabla para almacenar categorías de incidentes
@@ -50,7 +50,7 @@ CREATE TABLE Categoria (
 -- Tabla para gestionar incidentes por administradores
 CREATE TABLE Gestionar (
     IncidenteID BIGINT,
-    AdminID BIGINT
+    ClienteID BIGINT
 );
 
 CREATE TABLE Rol(
@@ -86,7 +86,7 @@ ALTER TABLE Categoria ADD CONSTRAINT categoria_d1 CHECK (Categoria <> '');
 
 -- RESTRICCIONES TABLA GESTIONAR
 ALTER TABLE Gestionar ALTER COLUMN IncidenteID SET NOT NULL;
-ALTER TABLE Gestionar ALTER COLUMN AdminID SET NOT NULL;
+ALTER TABLE Gestionar ALTER COLUMN ClienteID SET NOT NULL;
 
 
 ---- LLAVES PRIMARIAS ----
@@ -119,7 +119,7 @@ ALTER TABLE Foto ADD CONSTRAINT fk_foto_incidente FOREIGN KEY (IncidenteID) REFE
     ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- LLAVES FORANEAS GESTIONAR
-ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (AdminID) REFERENCES Administrador(AdminID)
+ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (ClienteID) REFERENCES Cliente(ClienteID)
     ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE Gestionar ADD CONSTRAINT fk_incidente_gestionar FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
     ON DELETE CASCADE ON UPDATE CASCADE;
@@ -181,10 +181,9 @@ COMMENT ON CONSTRAINT categoria_d1 ON Categoria IS 'Restriccion de longitud para
 -- Gestionar
 COMMENT ON TABLE Gestionar IS 'Tabla que guarda las relaciones entre Incidentes y su gestión por adminisradores';
 COMMENT ON COLUMN Gestionar.IncidenteID IS 'Identificador unico proveniente del incidente';
-COMMENT ON COLUMN Gestionar.AdminID IS 'Identificador unico proveniente del administrador';
+COMMENT ON COLUMN Gestionar.ClienteID IS 'Identificador unico proveniente del administrador';
 COMMENT ON CONSTRAINT fk_admin_gestionar ON Gestionar IS 'Llave foránea que referencia';
 COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que referencia';
 
 insert into categoria (categoriaid, categoria)
 values(246832,'baches');
-
