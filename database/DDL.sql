@@ -152,10 +152,10 @@ COMMENT ON CONSTRAINT pk_foto ON Foto IS 'Llave primaria que identifica una Foto
 COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foránea que referencia el Incidente al que retrata o se le es relevante la Foto';
 
 --Rol
-COMMENT ON TABLE Rol IS 'Tabla que contiene los roles de los clientes';
-COMMENT ON COLUMN Rol.RolID IS 'id unico del rol que se puede asignar';
-COMMENT ON COLUMN Rol.Nombre IS 'nombre del rol que se puede asiganr';
-COMMENT ON CONSTRAINT pk_rol on Rol IS 'Restriccions de llave primaria';
+COMMENT ON TABLE Rol IS 'Tabla que contiene los roles de los clientes'
+COMMENT ON COLUMN Rol.RolID IS 'id unico del rol que se puede asignar'
+COMMENT ON COLUMN Rol.Nombre IS 'nombre del rol que se puede asiganr'
+COMMENT ON CONSTRAINT pk_rol on Rol IS 'Restriccions de llave primaria'
 
 --Cliente
 COMMENT ON TABLE Cliente IS 'Tabla que contiene los datos del cliente';
