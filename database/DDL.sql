@@ -27,14 +27,6 @@ CREATE TABLE Foto (
 );
 
 -- Tabla para almacenar usuarios administradores
-CREATE TABLE Administrador (
-    AdminID BIGINT,
-    Nombre VARCHAR(50),
-    ApPaterno VARCHAR(50),
-    ApMaterno VARCHAR(50),
-    Correo VARCHAR(50),
-    Password VARCHAR(50)
-);
 
 
 -- Tabla para almacenar información de los clientes
@@ -44,7 +36,8 @@ CREATE TABLE Cliente (
     ApPaterno VARCHAR(100),
     ApMaterno VARCHAR(100),
     Correo VARCHAR(50),
-    Password VARCHAR(50)
+    Password VARCHAR(50),
+    Token VARCHAR(50)
 );
 
 -- Tabla para almacenar categorías de incidentes
@@ -57,10 +50,13 @@ CREATE TABLE Categoria (
 -- Tabla para gestionar incidentes por administradores
 CREATE TABLE Gestionar (
     IncidenteID BIGINT,
-    AdminID BIGINT
+    ClienteID BIGINT
 );
 
-
+CREATE TABLE Rol(
+    RolID INT,
+    Nombre varchar(45)
+);
 
 ---- RESTRICCIONES ----
 
@@ -74,12 +70,9 @@ ALTER TABLE Incidente ALTER COLUMN Latitud SET NOT NULL;
 ALTER TABLE Foto ALTER COLUMN IncidenteID SET NOT NULL;
 ALTER TABLE Foto ALTER COLUMN FotoID SET NOT NULL;
 
--- RESTRICCIONES TABLA ADMINISTRADOR
-ALTER TABLE Administrador ALTER COLUMN AdminID SET NOT NULL;
-ALTER TABLE Administrador ADD CONSTRAINT administrador_d1 CHECK (Nombre <> '');
-ALTER TABLE Administrador ADD CONSTRAINT administrador_d2 CHECK (ApPaterno <> '');
-ALTER TABLE Administrador ADD CONSTRAINT administrador_d3 CHECK (ApMaterno <> '');
-ALTER TABLE Administrador ADD CONSTRAINT administrador_d4 CHECK (Correo like '%_@_%._%');
+--RESTRICCIONES TABLA ROL
+ALTER TABLE Rol ALTER COLUMN RolID SET NOT NULL;
+ALTER TABLE Rol ALTER COLUMN Nombre SET NOT NULL;
 
 -- RESTRICCIONES TABLA CLIENTE
 ALTER TABLE Cliente ALTER COLUMN ClienteID SET NOT NULL;
@@ -93,7 +86,7 @@ ALTER TABLE Categoria ADD CONSTRAINT categoria_d1 CHECK (Categoria <> '');
 
 -- RESTRICCIONES TABLA GESTIONAR
 ALTER TABLE Gestionar ALTER COLUMN IncidenteID SET NOT NULL;
-ALTER TABLE Gestionar ALTER COLUMN AdminID SET NOT NULL;
+ALTER TABLE Gestionar ALTER COLUMN ClienteID SET NOT NULL;
 
 
 ---- LLAVES PRIMARIAS ----
@@ -104,8 +97,8 @@ ALTER TABLE Incidente ADD CONSTRAINT pk_incidente PRIMARY KEY (IncidenteID);
 -- LLAVES PRIMARIAS TABLA FOTO
 ALTER TABLE Foto ADD CONSTRAINT pk_foto PRIMARY KEY (FotoID, IncidenteID);
 
--- LLAVES PRIMARIAS ADMINISTRADOR
-ALTER TABLE Administrador ADD CONSTRAINT pk_admin PRIMARY KEY (AdminID);
+-- LLAVES PRIMARIAS ROL
+ALTER TABLE Rol ADD CONSTRAINT pk_rol PRIMARY KEY (RolID);
 
 -- LLAVES PRIMARIAS CLIENTE
 ALTER TABLE Cliente ADD CONSTRAINT pk_cliente PRIMARY KEY (ClienteID);
@@ -126,7 +119,7 @@ ALTER TABLE Foto ADD CONSTRAINT fk_foto_incidente FOREIGN KEY (IncidenteID) REFE
     ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- LLAVES FORANEAS GESTIONAR
-ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (AdminID) REFERENCES Administrador(AdminID)
+ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (ClienteID) REFERENCES Cliente(ClienteID)
     ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE Gestionar ADD CONSTRAINT fk_incidente_gestionar FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
     ON DELETE CASCADE ON UPDATE CASCADE;
@@ -158,19 +151,11 @@ COMMENT ON COLUMN Foto.IncidenteID IS 'Identificador unico proveniente del incid
 COMMENT ON CONSTRAINT pk_foto ON Foto IS 'Llave primaria que identifica una Foto.';
 COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foránea que referencia el Incidente al que retrata o se le es relevante la Foto';
 
--- Administrador
-COMMENT ON TABLE Administrador IS 'Tabla que contiene los datos del administrador.';
-COMMENT ON COLUMN Administrador.AdminID IS 'Identificador unico del administrador.';
-COMMENT ON COLUMN Administrador.Nombre IS 'Nombre del administrador.';
-COMMENT ON COLUMN Administrador.ApPaterno IS 'Apellido paterno del administrador.';
-COMMENT ON COLUMN Administrador.ApMaterno IS 'Apellido Materno del administrador.';
-COMMENT ON COLUMN Administrador.Correo IS 'Correo registrado del administrador.';
-COMMENT ON COLUMN Administrador.Password IS 'Password registrada del administrador.';
-COMMENT ON CONSTRAINT pk_admin ON Administrador IS 'Llave primaria que identifica de manera única a cada administrador.';
-COMMENT ON CONSTRAINT administrador_d1 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Nombre, evitando cadena vacia';
-COMMENT ON CONSTRAINT administrador_d2 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Apellido Paterno, evitando cadena vacia';
-COMMENT ON CONSTRAINT administrador_d3 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Apellido Materno, evitando cadena vacia';
-COMMENT ON CONSTRAINT administrador_d4 ON Administrador IS 'Restriccion de longitud para la cadena recibida como Correo, evitando cadena vacia';
+--Rol
+COMMENT ON TABLE Rol IS 'Tabla que contiene los roles de los clientes';
+COMMENT ON COLUMN Rol.RolID IS 'id unico del rol que se puede asignar';
+COMMENT ON COLUMN Rol.Nombre IS 'nombre del rol que se puede asiganr';
+COMMENT ON CONSTRAINT pk_rol on Rol IS 'Restriccions de llave primaria';
 
 --Cliente
 COMMENT ON TABLE Cliente IS 'Tabla que contiene los datos del cliente';
@@ -196,7 +181,7 @@ COMMENT ON CONSTRAINT categoria_d1 ON Categoria IS 'Restriccion de longitud para
 -- Gestionar
 COMMENT ON TABLE Gestionar IS 'Tabla que guarda las relaciones entre Incidentes y su gestión por adminisradores';
 COMMENT ON COLUMN Gestionar.IncidenteID IS 'Identificador unico proveniente del incidente';
-COMMENT ON COLUMN Gestionar.AdminID IS 'Identificador unico proveniente del administrador';
+COMMENT ON COLUMN Gestionar.ClienteID IS 'Identificador unico proveniente del administrador';
 COMMENT ON CONSTRAINT fk_admin_gestionar ON Gestionar IS 'Llave foránea que referencia';
 COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que referencia';
 
