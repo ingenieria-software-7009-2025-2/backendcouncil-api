@@ -1,3 +1,4 @@
+
 --Borrar base de datos para reinicio
 drop schema public cascade;
 create schema public;
