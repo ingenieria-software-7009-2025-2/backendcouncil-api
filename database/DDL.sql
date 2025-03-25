@@ -33,6 +33,7 @@ CREATE TABLE Foto (
 CREATE TABLE Cliente (
     ClienteID BIGINT,
     Nombre VARCHAR(100),
+    UserName VARCHAR(50),
     ApPaterno VARCHAR(100),
     ApMaterno VARCHAR(100),
     Correo VARCHAR(50),
@@ -80,6 +81,7 @@ ALTER TABLE Cliente ADD CONSTRAINT cliente_d1 CHECK (Nombre <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d2 CHECK (ApPaterno <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d3 CHECK (ApMaterno <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d4 CHECK (Correo like '%_@_%._%');
+ALTER TABLE Cliente ADD CONSTRAINT cliente_d5 CHECK (UserName <> '');
 -- RESTRICCIONES TABLA CATEGORIA
 ALTER TABLE Categoria ALTER COLUMN CategoriaID SET NOT NULL;
 ALTER TABLE Categoria ADD CONSTRAINT categoria_d1 CHECK (Categoria <> '');
@@ -141,7 +143,6 @@ COMMENT ON COLUMN Incidente.Longitud IS 'Coordenada geográfica de longitud del 
 COMMENT ON COLUMN Incidente.Latitud IS 'Coordena geográfica de latitud del incidente.';
 COMMENT ON COLUMN Incidente.Estado IS 'Estado del incidente [Reportado,En revision,Resuelto].';
 COMMENT ON CONSTRAINT pk_incidente ON Incidente IS 'Llave primaria que identifica de manera única cada incidente en la tabla Incidente.';
---COMMENT ON CONSTRAINT fk_incidente_categoria ON Incidente IS 'Llave foránea que referencia la categoría del incidente.';
 COMMENT ON CONSTRAINT fk_incidente_cliente ON Incidente IS 'Llave foránea que referencia el cliente asociado al incidente.';
 
 -- Foto
