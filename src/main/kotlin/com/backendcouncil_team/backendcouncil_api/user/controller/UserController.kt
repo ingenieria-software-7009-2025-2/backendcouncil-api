@@ -29,8 +29,9 @@ class   UserController(var userService: UserService) {
             apMaterno = userBody.apMaterno,
             password = userBody.password,
             correo = userBody.correo,
-            userName = userBody.userName
+            userName = userBody.username
         )
+        println(usuario.toString())
         val response = userService.addUser(usuario)
         return ResponseEntity.ok(response)
     }
@@ -89,6 +90,7 @@ class   UserController(var userService: UserService) {
             apMaterno = userBody.apMaterno,
             password = userBody.password,
             correo = userBody.correo,
+            userName = userBody.username
         )
 
         val response = userService.update(token.removePrefix("Bearer "),usuario,)

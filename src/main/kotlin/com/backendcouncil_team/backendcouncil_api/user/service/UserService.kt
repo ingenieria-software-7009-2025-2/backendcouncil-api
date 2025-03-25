@@ -22,9 +22,11 @@ class UserService(private var userRepository: UserRepository) {
                 apMaterno = usuario.apMaterno,
                 password = usuario.password!!,
                 mail = usuario.correo,
-                token = usuario.token
+                token = usuario.token,
+                username = usuario.userName
+
             )
-        println(usuarioDB.toString())
+
 
         val result = userRepository.save(usuarioDB)
         println("he guardado")
@@ -37,6 +39,7 @@ class UserService(private var userRepository: UserRepository) {
             correo = result.mail,
             token = result.token,
             password = result.password,
+            userName = result.username,
             isActive = false
         )
         return usuarioCreado
@@ -59,6 +62,7 @@ class UserService(private var userRepository: UserRepository) {
                 correo = user.mail,
                 token = user.token,
                 password = user.password,
+                userName = user.username,
                 isActive = false
             )
 
@@ -82,6 +86,7 @@ class UserService(private var userRepository: UserRepository) {
                 correo = userFound.mail,
                 token = token,
                 password = userFound.password,
+                userName = userFound.username,
                 isActive = false
             )
         } else {
@@ -119,6 +124,7 @@ class UserService(private var userRepository: UserRepository) {
                 correo = userFound.mail,
                 token = "*******",
                 password = userFound.password,
+                userName = userFound.username,
                 isActive = false
             )
         } else return null
@@ -129,6 +135,7 @@ class UserService(private var userRepository: UserRepository) {
         if (userFound != null) {
             val newUser = User(
                 clienteid = userFound.clienteid,
+                username = obtenerNoVacio(usuario.userName,userFound.username),
                 nombre = obtenerNoVacio(usuario.nombre,userFound.nombre),
                 apPaterno = obtenerNoVacio(usuario.apPaterno,userFound.apPaterno),
                 apMaterno = obtenerNoVacio(usuario.apMaterno,userFound.apMaterno),
@@ -146,6 +153,7 @@ class UserService(private var userRepository: UserRepository) {
                 correo = newUser.mail,
                 password = "********",
                 token = newUser.token,
+                userName = newUser.username,
                 isActive = false
             )
         } else return null

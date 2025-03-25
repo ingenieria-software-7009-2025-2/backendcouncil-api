@@ -6,5 +6,5 @@ data class UserBody(
     var apMaterno: String = "",
     var password: String = "",
     var correo: String = "",
-    var userName: String = ""
+    var username: String = ""
 )
