@@ -33,6 +33,7 @@ CREATE TABLE Foto (
 CREATE TABLE Cliente (
     ClienteID BIGINT,
     Nombre VARCHAR(100),
+    UserName VARCHAR(50),
     ApPaterno VARCHAR(100),
     ApMaterno VARCHAR(100),
     Correo VARCHAR(50),
@@ -50,7 +51,7 @@ CREATE TABLE Categoria (
 -- Tabla para gestionar incidentes por administradores
 CREATE TABLE Gestionar (
     IncidenteID BIGINT,
-    AdminID BIGINT
+    ClienteID BIGINT
 );
 
 CREATE TABLE Rol(
@@ -80,13 +81,14 @@ ALTER TABLE Cliente ADD CONSTRAINT cliente_d1 CHECK (Nombre <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d2 CHECK (ApPaterno <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d3 CHECK (ApMaterno <> '');
 ALTER TABLE Cliente ADD CONSTRAINT cliente_d4 CHECK (Correo like '%_@_%._%');
+ALTER TABLE Cliente ADD CONSTRAINT cliente_d5 CHECK (UserName <> '');
 -- RESTRICCIONES TABLA CATEGORIA
 ALTER TABLE Categoria ALTER COLUMN CategoriaID SET NOT NULL;
 ALTER TABLE Categoria ADD CONSTRAINT categoria_d1 CHECK (Categoria <> '');
 
 -- RESTRICCIONES TABLA GESTIONAR
 ALTER TABLE Gestionar ALTER COLUMN IncidenteID SET NOT NULL;
-ALTER TABLE Gestionar ALTER COLUMN AdminID SET NOT NULL;
+ALTER TABLE Gestionar ALTER COLUMN ClienteID SET NOT NULL;
 
 
 ---- LLAVES PRIMARIAS ----
@@ -119,7 +121,7 @@ ALTER TABLE Foto ADD CONSTRAINT fk_foto_incidente FOREIGN KEY (IncidenteID) REFE
     ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- LLAVES FORANEAS GESTIONAR
-ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (AdminID) REFERENCES Administrador(AdminID)
+ALTER TABLE Gestionar ADD CONSTRAINT fk_admin_gestionar FOREIGN KEY (ClienteID) REFERENCES Cliente(ClienteID)
     ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE Gestionar ADD CONSTRAINT fk_incidente_gestionar FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
     ON DELETE CASCADE ON UPDATE CASCADE;
@@ -141,7 +143,6 @@ COMMENT ON COLUMN Incidente.Longitud IS 'Coordenada geográfica de longitud del 
 COMMENT ON COLUMN Incidente.Latitud IS 'Coordena geográfica de latitud del incidente.';
 COMMENT ON COLUMN Incidente.Estado IS 'Estado del incidente [Reportado,En revision,Resuelto].';
 COMMENT ON CONSTRAINT pk_incidente ON Incidente IS 'Llave primaria que identifica de manera única cada incidente en la tabla Incidente.';
---COMMENT ON CONSTRAINT fk_incidente_categoria ON Incidente IS 'Llave foránea que referencia la categoría del incidente.';
 COMMENT ON CONSTRAINT fk_incidente_cliente ON Incidente IS 'Llave foránea que referencia el cliente asociado al incidente.';
 
 -- Foto
@@ -152,10 +153,10 @@ COMMENT ON CONSTRAINT pk_foto ON Foto IS 'Llave primaria que identifica una Foto
 COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foránea que referencia el Incidente al que retrata o se le es relevante la Foto';
 
 --Rol
-COMMENT ON TABLE Rol IS 'Tabla que contiene los roles de los clientes'
-COMMENT ON COLUMN Rol.RolID IS 'id unico del rol que se puede asignar'
-COMMENT ON COLUMN Rol.Nombre IS 'nombre del rol que se puede asiganr'
-COMMENT ON CONSTRAINT pk_rol on Rol IS 'Restriccions de llave primaria'
+COMMENT ON TABLE Rol IS 'Tabla que contiene los roles de los clientes';
+COMMENT ON COLUMN Rol.RolID IS 'id unico del rol que se puede asignar';
+COMMENT ON COLUMN Rol.Nombre IS 'nombre del rol que se puede asiganr';
+COMMENT ON CONSTRAINT pk_rol on Rol IS 'Restriccions de llave primaria';
 
 --Cliente
 COMMENT ON TABLE Cliente IS 'Tabla que contiene los datos del cliente';
@@ -181,7 +182,7 @@ COMMENT ON CONSTRAINT categoria_d1 ON Categoria IS 'Restriccion de longitud para
 -- Gestionar
 COMMENT ON TABLE Gestionar IS 'Tabla que guarda las relaciones entre Incidentes y su gestión por adminisradores';
 COMMENT ON COLUMN Gestionar.IncidenteID IS 'Identificador unico proveniente del incidente';
-COMMENT ON COLUMN Gestionar.AdminID IS 'Identificador unico proveniente del administrador';
+COMMENT ON COLUMN Gestionar.ClienteID IS 'Identificador unico proveniente del administrador';
 COMMENT ON CONSTRAINT fk_admin_gestionar ON Gestionar IS 'Llave foránea que referencia';
 COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que referencia';
 
