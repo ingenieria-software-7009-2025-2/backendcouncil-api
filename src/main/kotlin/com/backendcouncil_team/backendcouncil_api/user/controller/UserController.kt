@@ -28,7 +28,8 @@ class   UserController(var userService: UserService) {
             apPaterno = userBody.apPaterno,
             apMaterno = userBody.apMaterno,
             password = userBody.password,
-            correo = userBody.correo
+            correo = userBody.correo,
+            userName = userBody.userName
         )
         val response = userService.addUser(usuario)
         return ResponseEntity.ok(response)
