@@ -10,6 +10,8 @@ class User constructor(
     val clienteid: Long = 0,
     @Column(name = "nombre")
     var nombre: String ="",
+    @Column (name = "username")
+    var username: String ="",
     @Column(name = "appaterno")
     var apPaterno: String= "",
     @Column(name = "apmaterno")

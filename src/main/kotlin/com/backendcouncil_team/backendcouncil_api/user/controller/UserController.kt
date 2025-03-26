@@ -7,19 +7,57 @@ import com.backendcouncil_team.backendcouncil_api.user.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.tags.Tag
+import io.swagger.v3.oas.annotations.responses.*
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 
 /**
  * Controlador para gestionar las operaciones relacionadas con los usuarios.
  */
 @Controller
 @RequestMapping("/v1/users")
-class   UserController(var userService: UserService) {
+@Tag(
+    name = "users",
+    description = "Operaciones relacionadas con usuarios."
+)
+class  UserController(var userService: UserService) {
 
     /**
      * Endpoint para registrar un nuevo usuario.
      * @param userBody Datos del usuario que se recibirán en la petición.
      * @return ResponseEntity con la respuesta del servicio.
      */
+    @Operation(
+        summary = "Registra un usuario",
+        description = "Usando los datos brindados, registra un usuario.",
+        requestBody = RequestBody(
+            description = "Datos del usuario",
+            required = true,
+            content = [Content(
+                schema = Schema(implementation = UserBody::class)
+            )]
+        ),
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Usuario registrado",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PostMapping
     fun addUser(@RequestBody userBody: UserBody): ResponseEntity<Any> {
         // Convertir los datos del request a un objeto del dominio
@@ -28,10 +66,42 @@ class   UserController(var userService: UserService) {
             apPaterno = userBody.apPaterno,
             apMaterno = userBody.apMaterno,
             password = userBody.password,
-            correo = userBody.correo
+            correo = userBody.correo,
+            userName = userBody.username
         )
         val response = userService.addUser(usuario)
         return ResponseEntity.ok(response)
+    }
+
+    /**
+     * Endpoint para obtener la lista de todos los usuarios registrados.
+     * @return ResponseEntity con la lista de usuarios.
+     */
+    @Operation(
+        summary = "Regresa a todos los usuarios",
+        description = "Regresa a todos los usuarios registrados",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    array = ArraySchema(
+                        schema = Schema(implementation = Usuario::class)
+                    ),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
+    @GetMapping
+    fun getAllUsers(): ResponseEntity<Any> {
+        val result = userService.retrieveAllUser()
+        return ResponseEntity.ok(result)
     }
 
     /**
@@ -39,6 +109,32 @@ class   UserController(var userService: UserService) {
      * @param loginUserBody Datos del usuario (correo y contraseña) para autenticación.
      * @return ResponseEntity con la información del usuario si la autenticación es exitosa, o 404 si falla.
      */
+    @Operation(
+        summary = "Iniciado de sesión",
+        description = "Usando los datos brindados, intenta inicia sesión.",
+        requestBody = RequestBody(
+            description = "Datos de login del usuario",
+            required = true,
+            content = [Content(
+                schema = Schema(implementation = LoginUserBody::class)
+            )]
+        ),
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Sesión iniciada",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Usuario no encontrado / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PostMapping("/login")
     fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
         val result = userService.login(loginUserBody.correo, loginUserBody.password)
@@ -54,6 +150,25 @@ class   UserController(var userService: UserService) {
      * @param token Token de autorización proporcionado en la cabecera.
      * @return ResponseEntity con mensaje de éxito o error en caso de fallo.
      */
+    @Operation(
+        summary = "Cierra la sesión",
+        description = "Dada la sesión iniciada, cierra la sesión",
+        security = [SecurityRequirement(name = "BearerAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Sesión finalizada",
+                content = [Content(
+                    mediaType = "plain/text"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
         val successLogout = userService.logout(token.removePrefix("Bearer "))
@@ -69,6 +184,26 @@ class   UserController(var userService: UserService) {
      * @param token Token de autorización.
      * @return ResponseEntity con la información del usuario o un estado 401 si no es válido.
      */
+    @Operation(
+        summary = "Obtiene la información del usuario",
+        description = "Dada la sesión iniciada, obtiene su información",
+        security = [SecurityRequirement(name = "BearerAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Sin autorización / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @GetMapping("/me")
     fun me(@RequestHeader("Authorization") token: String): ResponseEntity<Usuario> {
         val response = userService.getInfoAboutMe(token.removePrefix("Bearer "))
@@ -79,6 +214,37 @@ class   UserController(var userService: UserService) {
         }
     }
 
+    /**
+     * Endpoint para modificar la información del usuario autenticado.
+     * @param token Token de autorización.
+     * @param userBody Datos del usuario a modificar.
+     * @return ResponseEntity con la información del usuario o un estado 401 si no es válido.
+     */
+    @Operation(
+        summary = "Modifica la información del usuario",
+        description = "Dada la sesión iniciada, modifica su información",
+        security = [SecurityRequirement(name = "BearerAuth")],
+        requestBody = RequestBody(
+            description = "Datos del usuario",
+            required = true,
+            content = [Content(schema = Schema(implementation = UserBody::class))]
+        ),
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Sin autorización / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PutMapping("/me")
     fun update(@RequestHeader("Authorization") token: String, @RequestBody userBody: UserBody): ResponseEntity<Usuario> {
 
@@ -88,6 +254,7 @@ class   UserController(var userService: UserService) {
             apMaterno = userBody.apMaterno,
             password = userBody.password,
             correo = userBody.correo,
+            userName = userBody.username
         )
 
         val response = userService.update(token.removePrefix("Bearer "),usuario,)
@@ -97,14 +264,5 @@ class   UserController(var userService: UserService) {
         } else {
             ResponseEntity.status(401).build()
         }
-    }
-    /**
-     * Endpoint para obtener la lista de todos los usuarios registrados.
-     * @return ResponseEntity con la lista de usuarios.
-     */
-    @GetMapping
-    fun getAllUsers(): ResponseEntity<Any> {
-        val result = userService.retrieveAllUser()
-        return ResponseEntity.ok(result)
     }
 }
