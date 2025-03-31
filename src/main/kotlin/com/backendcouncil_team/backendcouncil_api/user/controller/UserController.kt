@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
-//import io.swagger.v3.oas.annotations.responses.*
+import io.swagger.v3.oas.annotations.responses.*
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 //import io.swagger.v3.oas.annotations.parameters.RequestBody
 /**
@@ -44,6 +44,7 @@ class UserController(var userService: UserService) {
                 schema = Schema(implementation = UserBody::class)
             )]
         ),
+        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -59,7 +60,7 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-        */
+
     )
 
     @PostMapping
@@ -95,6 +96,7 @@ class UserController(var userService: UserService) {
                 schema = Schema(implementation = LoginUserBody::class)
             )]
         ),
+        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -110,7 +112,7 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-        */
+
     )
 
 
@@ -129,12 +131,12 @@ class UserController(var userService: UserService) {
      * @param token Token de autorización proporcionado en la cabecera.
      * @return ResponseEntity con mensaje de éxito o error en caso de fallo.
      */
-    /**
+
     @Operation(
         summary = "Cierra la sesión",
         description = "Dada la sesión iniciada, cierra la sesión",
         security = [SecurityRequirement(name = "BearerAuth")],
-    /**
+
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -149,9 +151,8 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-        */
+
     )
-    */
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
         val successLogout = userService.logout(token.removePrefix("Bearer "))
@@ -172,7 +173,6 @@ class UserController(var userService: UserService) {
         summary = "Obtiene la información del usuario",
         description = "Dada la sesión iniciada, obtiene su información",
         security = [SecurityRequirement(name = "BearerAuth")],
-        /**
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -188,7 +188,6 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-        */
     )
 
     @GetMapping("/me")
@@ -218,6 +217,7 @@ class UserController(var userService: UserService) {
             required = true,
             content = [Content(schema = Schema(implementation = UserBody::class))]
         ),
+        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -233,7 +233,7 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-        */
+
     )
 
     @PutMapping("/me")

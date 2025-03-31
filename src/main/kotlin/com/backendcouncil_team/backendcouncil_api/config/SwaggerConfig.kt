@@ -1,4 +1,4 @@
-package com.backendcouncil_team.backendcouncil_api
+package com.backendcouncil_team.backendcouncil_api.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
