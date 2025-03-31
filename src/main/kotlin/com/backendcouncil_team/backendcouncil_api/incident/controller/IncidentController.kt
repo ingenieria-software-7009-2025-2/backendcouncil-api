@@ -5,6 +5,7 @@ import com.backendcouncil_team.backendcouncil_api.incident.controller.body.Incid
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
+import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 
-
+/**
+ * Controlador para gestionar las operaciones relacionadas con cada incidente.
+ */
 @Controller
 @RequestMapping("/v1/incident")
 @Tag(
@@ -43,7 +46,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             content = [Content(
                 schema = Schema(implementation = IncidentBody::class)
             )]
-        ),
+        )
         /**
         responses = [
             ApiResponse(
@@ -61,6 +64,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             ),
         ]
         */
+
     )
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
@@ -75,8 +79,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             latitud = incidentBody.latitud,
             longitud =  incidentBody.longitud,
             estado = "reportado",
-
-        )
+            )
 
         if (user != null) {
             return ResponseEntity.ok(

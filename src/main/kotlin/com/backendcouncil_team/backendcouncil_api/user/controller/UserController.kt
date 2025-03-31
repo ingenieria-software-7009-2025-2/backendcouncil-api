@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
  */
 @Controller
 @RequestMapping("/v1/users")
-
 @Tag(
     name = "users",
     description = "Operaciones relacionadas con usuarios."
@@ -36,7 +35,7 @@ class UserController(var userService: UserService) {
     @Operation(
         summary = "Registra un usuario",
         description = "Usando los datos brindados, registra un usuario.",
-        /**
+    /**
         requestBody = RequestBody(
             description = "Datos del usuario",
             required = true,
@@ -60,9 +59,7 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-
     )
-
     @PostMapping
     fun addUser(@RequestBody userBody: UserBody): ResponseEntity<Any> {
         // Convertir los datos del request a un objeto del dominio
@@ -74,9 +71,39 @@ class UserController(var userService: UserService) {
             correo = userBody.correo,
             userName = userBody.username
         )
-        println(usuario.toString())
         val response = userService.addUser(usuario)
         return ResponseEntity.ok(response)
+    }
+
+    /**
+     * Endpoint para obtener la lista de todos los usuarios registrados.
+     * @return ResponseEntity con la lista de usuarios.
+     */
+    @Operation(
+        summary = "Regresa a todos los usuarios",
+        description = "Regresa a todos los usuarios registrados",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    array = ArraySchema(
+                        schema = Schema(implementation = Usuario::class)
+                    ),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
+    @GetMapping
+    fun getAllUsers(): ResponseEntity<Any> {
+        val result = userService.retrieveAllUser()
+        return ResponseEntity.ok(result)
     }
 
     /**
@@ -112,10 +139,7 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-
     )
-
-
     @PostMapping("/login")
     fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
         val result = userService.login(loginUserBody.correo, loginUserBody.password)
@@ -131,12 +155,11 @@ class UserController(var userService: UserService) {
      * @param token Token de autorización proporcionado en la cabecera.
      * @return ResponseEntity con mensaje de éxito o error en caso de fallo.
      */
-
+     
     @Operation(
         summary = "Cierra la sesión",
         description = "Dada la sesión iniciada, cierra la sesión",
         security = [SecurityRequirement(name = "BearerAuth")],
-
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -151,7 +174,6 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-
     )
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
@@ -168,7 +190,6 @@ class UserController(var userService: UserService) {
      * @param token Token de autorización.
      * @return ResponseEntity con la información del usuario o un estado 401 si no es válido.
      */
-
     @Operation(
         summary = "Obtiene la información del usuario",
         description = "Dada la sesión iniciada, obtiene su información",
@@ -189,7 +210,6 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
-
     @GetMapping("/me")
     fun me(@RequestHeader("Authorization") token: String): ResponseEntity<Usuario> {
         val response = userService.getInfoAboutMe(token.removePrefix("Bearer "))
@@ -206,11 +226,11 @@ class UserController(var userService: UserService) {
      * @param userBody Datos del usuario a modificar.
      * @return ResponseEntity con la información del usuario o un estado 401 si no es válido.
      */
-
     @Operation(
         summary = "Modifica la información del usuario",
         description = "Dada la sesión iniciada, modifica su información",
         security = [SecurityRequirement(name = "BearerAuth")],
+
         /**
         requestBody = RequestBody(
             description = "Datos del usuario",
@@ -233,9 +253,7 @@ class UserController(var userService: UserService) {
                 content = [Content()]
             ),
         ]
-
     )
-
     @PutMapping("/me")
     fun update(@RequestHeader("Authorization") token: String, @RequestBody userBody: UserBody): ResponseEntity<Usuario> {
 
@@ -255,14 +273,5 @@ class UserController(var userService: UserService) {
         } else {
             ResponseEntity.status(401).build()
         }
-    }
-    /**
-     * Endpoint para obtener la lista de todos los usuarios registrados.
-     * @return ResponseEntity con la lista de usuarios.
-     */
-    @GetMapping
-    fun getAllUsers(): ResponseEntity<Any> {
-        val result = userService.retrieveAllUser()
-        return ResponseEntity.ok(result)
     }
 }

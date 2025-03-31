@@ -38,7 +38,7 @@ CREATE TABLE Cliente (
     ApMaterno VARCHAR(100),
     Correo VARCHAR(50),
     Password VARCHAR(50),
-    Token VARCHAR(30)
+    Token VARCHAR(50)
 );
 
 -- Tabla para almacenar categorías de incidentes
@@ -188,4 +188,3 @@ COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que
 
 insert into categoria (categoriaid, categoria)
 values(246832,'baches');
-
