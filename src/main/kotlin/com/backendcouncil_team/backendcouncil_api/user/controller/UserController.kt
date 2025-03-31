@@ -9,13 +9,11 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.responses.*
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.parameters.RequestBody
-
+//import io.swagger.v3.oas.annotations.parameters.RequestBody
 /**
  * Controlador para gestionar las operaciones relacionadas con los usuarios.
  */
@@ -25,16 +23,19 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody
     name = "users",
     description = "Operaciones relacionadas con usuarios."
 )
-class  UserController(var userService: UserService) {
+
+class UserController(var userService: UserService) {
 
     /**
      * Endpoint para registrar un nuevo usuario.
      * @param userBody Datos del usuario que se recibirán en la petición.
      * @return ResponseEntity con la respuesta del servicio.
      */
+
     @Operation(
         summary = "Registra un usuario",
         description = "Usando los datos brindados, registra un usuario.",
+    /**
         requestBody = RequestBody(
             description = "Datos del usuario",
             required = true,
@@ -42,6 +43,7 @@ class  UserController(var userService: UserService) {
                 schema = Schema(implementation = UserBody::class)
             )]
         ),
+        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -109,9 +111,11 @@ class  UserController(var userService: UserService) {
      * @param loginUserBody Datos del usuario (correo y contraseña) para autenticación.
      * @return ResponseEntity con la información del usuario si la autenticación es exitosa, o 404 si falla.
      */
+
     @Operation(
         summary = "Iniciado de sesión",
         description = "Usando los datos brindados, intenta inicia sesión.",
+        /**
         requestBody = RequestBody(
             description = "Datos de login del usuario",
             required = true,
@@ -119,6 +123,7 @@ class  UserController(var userService: UserService) {
                 schema = Schema(implementation = LoginUserBody::class)
             )]
         ),
+        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -150,6 +155,7 @@ class  UserController(var userService: UserService) {
      * @param token Token de autorización proporcionado en la cabecera.
      * @return ResponseEntity con mensaje de éxito o error en caso de fallo.
      */
+     
     @Operation(
         summary = "Cierra la sesión",
         description = "Dada la sesión iniciada, cierra la sesión",
@@ -224,11 +230,14 @@ class  UserController(var userService: UserService) {
         summary = "Modifica la información del usuario",
         description = "Dada la sesión iniciada, modifica su información",
         security = [SecurityRequirement(name = "BearerAuth")],
+
+        /**
         requestBody = RequestBody(
             description = "Datos del usuario",
             required = true,
             content = [Content(schema = Schema(implementation = UserBody::class))]
         ),
+        */
         responses = [
             ApiResponse(
                 responseCode = "200",

@@ -7,6 +7,7 @@ import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Inc
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
+import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -45,7 +46,8 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             content = [Content(
                 schema = Schema(implementation = IncidentBody::class)
             )]
-        ),
+        )
+        /**
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -61,6 +63,8 @@ class IncidentController(var incidentService: IncidentService,var userService: U
                 content = [Content()]
             ),
         ]
+        */
+
     )
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
