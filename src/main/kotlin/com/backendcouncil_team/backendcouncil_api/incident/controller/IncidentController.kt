@@ -5,7 +5,6 @@ import com.backendcouncil_team.backendcouncil_api.incident.controller.body.Incid
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
-import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
