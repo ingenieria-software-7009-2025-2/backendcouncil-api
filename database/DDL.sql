@@ -188,3 +188,4 @@ COMMENT ON CONSTRAINT fk_incidente_gestionar ON Gestionar IS 'Llave foránea que
 
 insert into categoria (categoriaid, categoria)
 values(246832,'baches');
+
