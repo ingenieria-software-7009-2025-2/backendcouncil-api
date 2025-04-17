@@ -74,6 +74,10 @@ class UserController(var userService: UserService) {
             userName = userBody.username
         )
         val response = userService.addUser(usuario)
+
+        if (response.clienteid?.toInt() == 0){
+            return ResponseEntity.badRequest().body("usuario existente")
+        }
         return ResponseEntity.ok(response)
     }
 

@@ -5,12 +5,15 @@ import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
-import org.springframework.http.ResponseEntity
+
 
 interface UserRepository : CrudRepository<User, Int> {
 
     @Query(value = "SELECT * FROM cliente WHERE correo=?1", nativeQuery = true)
     fun findByEmail(email: String): User?
+
+    @Query(value = "SELECT * FROM cliente WHERE username=?1", nativeQuery = true)
+    fun findByUsername(username: String): User?
 
     @Query(value = "SELECT * FROM cliente WHERE correo=?1 AND password=?2", nativeQuery = true)
     fun findByEmailAndPassword(email: String, password: String): User?

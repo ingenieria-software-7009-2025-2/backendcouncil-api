@@ -28,9 +28,25 @@ class UserService(private var userRepository: UserRepository) {
 
             )
 
+        val emailSearch = userRepository.findByEmail(usuarioDB.mail)
+        println(emailSearch)
+        val userNameSearch = userRepository.findByUsername(usuarioDB.username)
 
+        if (emailSearch != null || userNameSearch != null) {
+            val result = Usuario(
+                clienteid = 0,
+                nombre = usuario.nombre,
+                apPaterno = usuario.apPaterno,
+                apMaterno = usuario.apMaterno,
+                password = usuario.password!!,
+                correo = usuario.correo,
+                token = usuario.token,
+                userName = usuario.userName
+
+            )
+            return result
+        }
         val result = userRepository.save(usuarioDB)
-        println("he guardado")
         // Convertimos el objeto de nuestra BD a un objeto de nuestro dominio.
         val usuarioCreado = Usuario(
             clienteid = result.clienteid,
