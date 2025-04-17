@@ -143,14 +143,27 @@ class UserController(var userService: UserService) {
     )
     @PostMapping("/login")
     fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
-        val result = userService.login(loginUserBody.correo, loginUserBody.password)
-        return if (result == null) {
-            ResponseEntity.notFound().build()
+        if (esCorreoValido(loginUserBody.correo)) {
+            val result = userService.login(loginUserBody.correo, loginUserBody.password)
+            return if (result == null) {
+                ResponseEntity.notFound().build()
+            } else {
+                ResponseEntity.ok(result)
+            }
         } else {
-            ResponseEntity.ok(result)
+            val result = userService.loginUser(loginUserBody.correo, loginUserBody.password)
+            return if (result == null) {
+                ResponseEntity.notFound().build()
+            } else {
+                ResponseEntity.ok(result)
+            }
         }
     }
 
+    fun esCorreoValido(correo: String): Boolean {
+        val regexCorreo = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
+        return regexCorreo.matches(correo)
+    }
     /**
      * Endpoint para cerrar sesión.
      * @param token Token de autorización proporcionado en la cabecera.

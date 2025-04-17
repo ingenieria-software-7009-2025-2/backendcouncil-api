@@ -95,6 +95,29 @@ class UserService(private var userRepository: UserRepository) {
 
     }
 
+    fun loginUser(user: String, password: String): Usuario? {
+        val userFound = userRepository.findByUserAndPassword(user, password)
+
+        return if (userFound != null) {
+            val token = UUID.randomUUID().toString()
+            updateTokenUser(userFound, token)
+            Usuario(
+                clienteid = userFound.clienteid,
+                nombre = userFound.nombre,
+                apPaterno =  userFound.apPaterno,
+                apMaterno = userFound.apMaterno,
+                correo = userFound.mail,
+                token = token,
+                password = userFound.password,
+                userName = userFound.username,
+                isActive = false
+            )
+        } else {
+            userFound
+        }
+
+    }
+
     fun updateTokenUser(user: User, token: String) {
         user.token = token
         userRepository.save(user)
