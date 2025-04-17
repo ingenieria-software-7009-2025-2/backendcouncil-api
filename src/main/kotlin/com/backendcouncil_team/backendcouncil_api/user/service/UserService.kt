@@ -76,6 +76,9 @@ class UserService(private var userRepository: UserRepository) {
         val userFound = userRepository.findByEmailAndPassword(mail, password)
 
         return if (userFound != null) {
+            if (userFound.token != null){
+                return null
+            }
             val token = UUID.randomUUID().toString()
             updateTokenUser(userFound, token)
             Usuario(
@@ -98,7 +101,11 @@ class UserService(private var userRepository: UserRepository) {
     fun loginUser(user: String, password: String): Usuario? {
         val userFound = userRepository.findByUserAndPassword(user, password)
 
+
         return if (userFound != null) {
+            if (userFound.token != null){
+                return null
+            }
             val token = UUID.randomUUID().toString()
             updateTokenUser(userFound, token)
             Usuario(
