@@ -1,5 +1,6 @@
 package com.backendcouncil_team.backendcouncil_api.user.controller
 
+import com.backendcouncil_team.backendcouncil_api.user.controller.body.DeleteUserBody
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.LoginUserBody
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
@@ -141,6 +142,18 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
+
+    @DeleteMapping
+    fun deleteUser(@RequestBody userBody: DeleteUserBody): ResponseEntity<Any> {
+        val response = userService.delete(userBody.correo,userBody.password,userBody.token.removePrefix("Bearer "))
+
+        if (response < 1){
+            return ResponseEntity.badRequest().body("no se pudo eliminar ese usuario")
+        } else {
+            return ResponseEntity.ok(response)
+        }
+    }
+
     @PostMapping("/login")
     fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
         if (esCorreoValido(loginUserBody.correo)) {
@@ -189,6 +202,7 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
+
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
         val successLogout = userService.logout(token.removePrefix("Bearer "))
@@ -288,4 +302,6 @@ class UserController(var userService: UserService) {
             ResponseEntity.status(401).build()
         }
     }
+
+
 }

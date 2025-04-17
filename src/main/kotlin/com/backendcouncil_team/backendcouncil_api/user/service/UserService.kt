@@ -3,6 +3,7 @@ package com.backendcouncil_team.backendcouncil_api.user.service
 import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
 import com.backendcouncil_team.backendcouncil_api.user.repository.UserRepository
 import com.backendcouncil_team.backendcouncil_api.user.repository.entity.User
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.UUID
@@ -70,6 +71,12 @@ class UserService(private var userRepository: UserRepository) {
         }
 
         return myUsers
+    }
+
+    fun delete(mail:String, password: String, token: String) : Int {
+        val response = userRepository.deleteUser(mail, password, token)
+
+        return response
     }
 
     fun login(mail: String, password: String): Usuario? {
