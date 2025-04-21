@@ -19,6 +19,7 @@ class UserService(private var userRepository: UserRepository) {
             User(
                 clienteid = System.currentTimeMillis(),
                 nombre = usuario.nombre,
+                rolid = 2,
                 apPaterno = usuario.apPaterno,
                 apMaterno = usuario.apMaterno,
                 password = usuario.password!!,
@@ -35,6 +36,7 @@ class UserService(private var userRepository: UserRepository) {
         if (emailSearch != null || userNameSearch != null) {
             val result = Usuario(
                 clienteid = 0,
+                rolid = 1,
                 nombre = usuario.nombre,
                 apPaterno = usuario.apPaterno,
                 apMaterno = usuario.apMaterno,
@@ -50,6 +52,7 @@ class UserService(private var userRepository: UserRepository) {
         // Convertimos el objeto de nuestra BD a un objeto de nuestro dominio.
         val usuarioCreado = Usuario(
             clienteid = result.clienteid,
+            rolid = result.rolid,
             nombre = result.nombre,
             apPaterno = result.apPaterno,
             apMaterno = result.apMaterno,
@@ -73,6 +76,7 @@ class UserService(private var userRepository: UserRepository) {
             // Convertimos el objeto de nuestra BD a un objeto de nuestro dominio.
             val userFound = Usuario(
                 clienteid = user.clienteid,
+                rolid = user.rolid,
                 nombre = user.nombre,
                 apPaterno = user.apPaterno,
                 apMaterno = user.apMaterno,
@@ -106,6 +110,7 @@ class UserService(private var userRepository: UserRepository) {
             updateTokenUser(userFound, token)
             Usuario(
                 clienteid = userFound.clienteid,
+                rolid = userFound.rolid,
                 nombre = userFound.nombre,
                 apPaterno =  userFound.apPaterno,
                 apMaterno = userFound.apMaterno,
@@ -133,6 +138,7 @@ class UserService(private var userRepository: UserRepository) {
             updateTokenUser(userFound, token)
             Usuario(
                 clienteid = userFound.clienteid,
+                rolid = userFound.rolid,
                 nombre = userFound.nombre,
                 apPaterno =  userFound.apPaterno,
                 apMaterno = userFound.apMaterno,
@@ -171,6 +177,7 @@ class UserService(private var userRepository: UserRepository) {
         if (userFound != null) {
             return Usuario(
                 clienteid = userFound.clienteid,
+                rolid = userFound.rolid,
                 nombre = userFound.nombre,
                 apPaterno =  userFound.apPaterno,
                 apMaterno = userFound.apMaterno,
@@ -190,6 +197,7 @@ class UserService(private var userRepository: UserRepository) {
             println(userFound.username)
             val newUser = User(
                 clienteid = userFound.clienteid,
+                rolid = userFound.rolid,
                 username = obtenerNoVacio(usuario.userName,userFound.username),
                 nombre = obtenerNoVacio(usuario.nombre,userFound.nombre),
                 apPaterno = obtenerNoVacio(usuario.apPaterno,userFound.apPaterno),
@@ -202,6 +210,7 @@ class UserService(private var userRepository: UserRepository) {
             userRepository.save(newUser)
             return Usuario(
                 clienteid = newUser.clienteid,
+                rolid = newUser.rolid,
                 nombre = newUser.nombre,
                 apPaterno = newUser.apPaterno,
                 apMaterno = newUser.apMaterno,
