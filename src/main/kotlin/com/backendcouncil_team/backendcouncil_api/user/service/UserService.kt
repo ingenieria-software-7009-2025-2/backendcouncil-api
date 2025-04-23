@@ -30,7 +30,7 @@ class UserService(private var userRepository: UserRepository) {
             )
 
         val emailSearch = userRepository.findByEmail(usuarioDB.mail)
-        println(emailSearch)
+        
         val userNameSearch = userRepository.findByUsername(usuarioDB.username)
 
         if (emailSearch != null || userNameSearch != null) {
