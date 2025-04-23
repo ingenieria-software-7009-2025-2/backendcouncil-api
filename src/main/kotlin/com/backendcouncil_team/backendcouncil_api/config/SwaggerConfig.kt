@@ -18,7 +18,7 @@ class SwaggerConfig {
             .info(
                 Info()
                     .title("SISREP - Sistema de Reportes Urbanos - API")
-                    .version("1.0.0")
+                    .version("1.1.3")
                     .description("Esta es la API para SISREP en un primer acercamiento.")
                     .contact(
                         Contact()
