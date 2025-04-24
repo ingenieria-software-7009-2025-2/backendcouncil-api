@@ -5,8 +5,20 @@ import com.backendcouncil_team.backendcouncil_api.incident.repository.IncidentRe
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
 import org.springframework.stereotype.Service
 import java.time.Instant
+
+/**
+ * Clase de servicio referente a incidentes.
+ * @property incidentRepository Repository que contiene las queries.
+ */
 @Service
 class IncidentService(private val incidentRepository: IncidentRepository) {
+
+    /**
+     * Función que agrega un incidente.
+     * @param cliente ID de cliente qeu reporta.
+     * @param incidente Dominio de incidente con los datos a agregar.
+     * @return El incidente que se ha creado.
+     */
     fun addIncident(cliente: Long ,incidente: Incidente): Incidente {
         val incidentDB =
             Incident(

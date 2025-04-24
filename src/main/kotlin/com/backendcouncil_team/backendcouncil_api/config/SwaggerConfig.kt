@@ -9,8 +9,17 @@ import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.GroupedOpenApi
 
+/**
+ * Clase que establece la configuración de la documentación con OpenAPI.
+ */
+
 @Configuration
 class SwaggerConfig {
+
+    /**
+     * Función que regresa una instancia OpenAPI customizada.
+     * @return instancia OpenAPI customizada a nuestra conveniencia.
+     */
 
     @Bean
     fun customOpenAPI(): OpenAPI {
@@ -38,6 +47,11 @@ class SwaggerConfig {
             )
     }
 
+
+    /**
+     * Función que regresa el grupo de varias OpenAPI's, a través de un builder.
+     * @return el grupo de varias OpenAPI's.
+     */
     @Bean
     fun publicApi() : GroupedOpenApi {
         return GroupedOpenApi.builder()

@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 /**
  * Controlador para gestionar las operaciones relacionadas con cada incidente.
+ * @property incidentService
+ * @property userService
  */
 @Controller
 @RequestMapping("/v1/incident")

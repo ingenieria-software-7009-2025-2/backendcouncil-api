@@ -17,7 +17,8 @@ import io.swagger.v3.oas.annotations.responses.*
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 
 /**
- * Controlador para gestionar las operaciones relacionadas con los usuarios.
+ * Controlador para gestionar las operaciones relacionadas con los clientes/usuarios.
+ * @property UserService Instancia de una clase de servicio dedicada a usuarios.
  */
 @Controller
 @RequestMapping("/v1/users")
@@ -33,7 +34,6 @@ class UserController(var userService: UserService) {
      * @param userBody Datos del usuario que se recibirán en la petición.
      * @return ResponseEntity con la respuesta del servicio.
      */
-
     @Operation(
         summary = "Registra un usuario",
         description = "Usando los datos brindados, registra un usuario.",
@@ -106,7 +106,7 @@ class UserController(var userService: UserService) {
     /**
      * Endpoint para borrar cuenta.
      * @param userBody Datos del usuario que se recibirán en la petición (correo, password, token).
-     * @return ResponseEntity con la información del usuario si la autenticación es exitosa, o 400 si falla.
+     * @return ResponseEntity con la información del usuario y la autenticación es exitosa, o 400 si falla.
      */
     @Operation(
         summary = "Borrar una cuenta",
@@ -138,6 +138,30 @@ class UserController(var userService: UserService) {
         }
     }
 
+    /**
+     * Endpoint para iniciar sesión.
+     * @param loginUserBody Datos del usuario (correo y contraseña) para autenticación.
+     * @return ResponseEntity con la información del usuario si la autenticación es exitosa, o 404 si falla.
+     */
+    @Operation(
+        summary = "Iniciado de sesión",
+        description = "Usando los datos brindados, intenta inicia sesión.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Sesión iniciada",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Usuario no encontrado / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PostMapping("/login")
     fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
         if (esCorreoValido(loginUserBody.correo)) {
@@ -157,16 +181,20 @@ class UserController(var userService: UserService) {
         }
     }
 
+    /**
+     * Función que regresa si dada una cadena, esta cumple con el patrón para ser un correo electrónico.
+     * @param correo Cadena a probar que cumple el patrón de correo.
+     */
     fun esCorreoValido(correo: String): Boolean {
         val regexCorreo = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
         return regexCorreo.matches(correo)
     }
+
     /**
      * Endpoint para cerrar sesión.
      * @param token Token de autorización proporcionado en la cabecera.
      * @return ResponseEntity con mensaje de éxito o error en caso de fallo.
      */
-     
     @Operation(
         summary = "Cierra la sesión",
         description = "Dada la sesión iniciada, cierra la sesión",
@@ -186,7 +214,6 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
-
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
         val successLogout = userService.logout(token.removePrefix("Bearer "))
@@ -278,6 +305,4 @@ class UserController(var userService: UserService) {
             ResponseEntity.status(401).build()
         }
     }
-
-
 }
