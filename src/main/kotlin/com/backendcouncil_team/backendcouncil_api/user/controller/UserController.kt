@@ -307,5 +307,9 @@ class UserController(var userService: UserService) {
         }
     }
 
+    @GetMapping("/toolkit")
+    fun GetAllUsers() : ResponseEntity<List<Usuario>> {
+        return ResponseEntity.ok(userService.findAll())
+    }
 
 }

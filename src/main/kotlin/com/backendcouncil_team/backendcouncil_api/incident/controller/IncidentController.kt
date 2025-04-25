@@ -90,4 +90,8 @@ class IncidentController(var incidentService: IncidentService,var userService: U
 
         } else return ResponseEntity.notFound().build()
     }
+    GetMapping("/toolkit")
+    fun getAll(): ResponseEntity<List<Usuario>>{
+        return ResponseEntity.ok(IncidentService.findAll())
+    }
 }

@@ -225,4 +225,34 @@ class UserService(private var userRepository: UserRepository) {
     fun obtenerNoVacio(primero: String, segundo: String): String {
         return if (primero.isNotEmpty()) primero else segundo
     }
+
+    fun findAll(): List<Usuario> {
+        val lista = userRepository.findAll()
+        val respuesta : MutableList<Usuario> = mutableListOf()
+        lista.forEach{
+            user ->
+            respuesta.add(castUser(user))
+            print(user.mail)
+        }
+
+        return  respuesta
+
+
+    }
+
+    fun castUser (user: User) : Usuario {
+        return Usuario(
+            clienteid = user.clienteid,
+            rolid = user.rolid,
+            nombre = user.nombre,
+            apPaterno = user.apPaterno,
+            apMaterno = user.apMaterno,
+            correo = user.mail,
+            password = "********",
+            token = user.token,
+            userName = user.username,
+            isActive = false
+        )
+    }
+
 }
