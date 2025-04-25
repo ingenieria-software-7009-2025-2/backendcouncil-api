@@ -1,5 +1,6 @@
 package com.backendcouncil_team.backendcouncil_api.user.controller
 
+import com.backendcouncil_team.backendcouncil_api.user.controller.body.DeleteUserBody
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.LoginUserBody
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
@@ -73,6 +74,10 @@ class UserController(var userService: UserService) {
             userName = userBody.username
         )
         val response = userService.addUser(usuario)
+
+        if (response.clienteid?.toInt() == 0){
+            return ResponseEntity.badRequest().body("usuario existente")
+        }
         return ResponseEntity.ok(response)
     }
 
@@ -141,16 +146,41 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
-    @PostMapping("/login")
-    fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
-        val result = userService.login(loginUserBody.correo, loginUserBody.password)
-        return if (result == null) {
-            ResponseEntity.notFound().build()
+
+    @DeleteMapping
+    fun deleteUser(@RequestBody userBody: DeleteUserBody): ResponseEntity<Any> {
+        val response = userService.delete(userBody.correo,userBody.password,userBody.token.removePrefix("Bearer "))
+
+        if (response < 1){
+            return ResponseEntity.badRequest().body("no se pudo eliminar ese usuario")
         } else {
-            ResponseEntity.ok(result)
+            return ResponseEntity.ok(response)
         }
     }
 
+    @PostMapping("/login")
+    fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
+        if (esCorreoValido(loginUserBody.correo)) {
+            val result = userService.login(loginUserBody.correo, loginUserBody.password)
+            return if (result == null) {
+                ResponseEntity.notFound().build()
+            } else {
+                ResponseEntity.ok(result)
+            }
+        } else {
+            val result = userService.loginUser(loginUserBody.correo, loginUserBody.password)
+            return if (result == null) {
+                ResponseEntity.notFound().build()
+            } else {
+                ResponseEntity.ok(result)
+            }
+        }
+    }
+
+    fun esCorreoValido(correo: String): Boolean {
+        val regexCorreo = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
+        return regexCorreo.matches(correo)
+    }
     /**
      * Endpoint para cerrar sesión.
      * @param token Token de autorización proporcionado en la cabecera.
@@ -176,6 +206,7 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
+
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
         val successLogout = userService.logout(token.removePrefix("Bearer "))
@@ -275,4 +306,6 @@ class UserController(var userService: UserService) {
             ResponseEntity.status(401).build()
         }
     }
+
+
 }
