@@ -15,9 +15,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.responses.*
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-//import io.swagger.v3.oas.annotations.parameters.RequestBody
+
 /**
- * Controlador para gestionar las operaciones relacionadas con los usuarios.
+ * Controlador para gestionar las operaciones relacionadas con los clientes/usuarios.
+ * @property UserService Instancia de una clase de servicio dedicada a usuarios.
  */
 @Controller
 @RequestMapping("/v1/users")
@@ -33,19 +34,9 @@ class UserController(var userService: UserService) {
      * @param userBody Datos del usuario que se recibirán en la petición.
      * @return ResponseEntity con la respuesta del servicio.
      */
-
     @Operation(
         summary = "Registra un usuario",
         description = "Usando los datos brindados, registra un usuario.",
-    /**
-        requestBody = RequestBody(
-            description = "Datos del usuario",
-            required = true,
-            content = [Content(
-                schema = Schema(implementation = UserBody::class)
-            )]
-        ),
-        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -113,23 +104,48 @@ class UserController(var userService: UserService) {
     }
 
     /**
+     * Endpoint para borrar cuenta.
+     * @param userBody Datos del usuario que se recibirán en la petición (correo, password, token).
+     * @return ResponseEntity con la información del usuario y la autenticación es exitosa, o 400 si falla.
+     */
+    @Operation(
+        summary = "Borrar una cuenta",
+        description = "Usando el correo, confirmación de contraseña, y un tóken, elimina la cuenta.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Cuenta borrada con éxito.",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Usuario no encontrado / Mal contraseña / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
+    @DeleteMapping
+    fun deleteUser(@RequestBody userBody: DeleteUserBody): ResponseEntity<Any> {
+        val response = userService.delete(userBody.correo,userBody.password,userBody.token.removePrefix("Bearer "))
+
+        if (response < 1){
+            return ResponseEntity.badRequest().body("no se pudo eliminar ese usuario")
+        } else {
+            return ResponseEntity.ok(response)
+        }
+    }
+
+    /**
      * Endpoint para iniciar sesión.
      * @param loginUserBody Datos del usuario (correo y contraseña) para autenticación.
      * @return ResponseEntity con la información del usuario si la autenticación es exitosa, o 404 si falla.
      */
-
     @Operation(
         summary = "Iniciado de sesión",
         description = "Usando los datos brindados, intenta inicia sesión.",
-        /**
-        requestBody = RequestBody(
-            description = "Datos de login del usuario",
-            required = true,
-            content = [Content(
-                schema = Schema(implementation = LoginUserBody::class)
-            )]
-        ),
-        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -146,18 +162,6 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
-
-    @DeleteMapping
-    fun deleteUser(@RequestBody userBody: DeleteUserBody): ResponseEntity<Any> {
-        val response = userService.delete(userBody.correo,userBody.password,userBody.token.removePrefix("Bearer "))
-
-        if (response < 1){
-            return ResponseEntity.badRequest().body("no se pudo eliminar ese usuario")
-        } else {
-            return ResponseEntity.ok(response)
-        }
-    }
-
     @PostMapping("/login")
     fun login(@RequestBody loginUserBody: LoginUserBody): ResponseEntity<Usuario> {
         if (esCorreoValido(loginUserBody.correo)) {
@@ -177,16 +181,20 @@ class UserController(var userService: UserService) {
         }
     }
 
+    /**
+     * Función que regresa si dada una cadena, esta cumple con el patrón para ser un correo electrónico.
+     * @param correo Cadena a probar que cumple el patrón de correo.
+     */
     fun esCorreoValido(correo: String): Boolean {
         val regexCorreo = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
         return regexCorreo.matches(correo)
     }
+
     /**
      * Endpoint para cerrar sesión.
      * @param token Token de autorización proporcionado en la cabecera.
      * @return ResponseEntity con mensaje de éxito o error en caso de fallo.
      */
-     
     @Operation(
         summary = "Cierra la sesión",
         description = "Dada la sesión iniciada, cierra la sesión",
@@ -206,7 +214,6 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
-
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String): ResponseEntity<String> {
         val successLogout = userService.logout(token.removePrefix("Bearer "))
@@ -262,14 +269,6 @@ class UserController(var userService: UserService) {
         summary = "Modifica la información del usuario",
         description = "Dada la sesión iniciada, modifica su información",
         security = [SecurityRequirement(name = "BearerAuth")],
-
-        /**
-        requestBody = RequestBody(
-            description = "Datos del usuario",
-            required = true,
-            content = [Content(schema = Schema(implementation = UserBody::class))]
-        ),
-        */
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -306,6 +305,4 @@ class UserController(var userService: UserService) {
             ResponseEntity.status(401).build()
         }
     }
-
-
 }
