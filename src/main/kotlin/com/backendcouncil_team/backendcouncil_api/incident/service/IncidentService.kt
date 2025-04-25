@@ -38,7 +38,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             estado = result.estado
         )
     }
-    
+
     fun findAll(): List<Incidente> {
         val lista = incidentRepository.findAll()
         val respuesta : MutableList<Incidente> = mutableListOf()
@@ -48,6 +48,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
 
         }
         return respuesta
+
     }
 
     fun castIncident(incident :Incident) : Incidente {

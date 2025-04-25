@@ -15,10 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * Controlador para gestionar las operaciones relacionadas con cada incidente.
@@ -90,8 +87,9 @@ class IncidentController(var incidentService: IncidentService,var userService: U
 
         } else return ResponseEntity.notFound().build()
     }
-    GetMapping("/toolkit")
-    fun getAll(): ResponseEntity<List<Usuario>>{
-        return ResponseEntity.ok(IncidentService.findAll())
+    
+    @GetMapping("/toolkit")
+    fun getAll(): ResponseEntity<List<Incidente>>{
+        return ResponseEntity.ok(incidentService.findAll())
     }
 }
