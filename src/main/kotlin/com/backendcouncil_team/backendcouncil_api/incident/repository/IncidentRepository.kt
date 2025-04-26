@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface IncidentRepository: CrudRepository<Incident, Int> {
-@Query(value = "SELECT * FROM cliente", nativeQuery = true)
+@Query(value = "SELECT * FROM incidente", nativeQuery = true)
 override fun findAll() : List<Incident>
 }
