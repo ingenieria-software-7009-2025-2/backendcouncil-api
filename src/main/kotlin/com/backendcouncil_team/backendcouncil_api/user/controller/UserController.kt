@@ -108,6 +108,23 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
+
+    @GetMapping("/check-username")
+    fun checkUsername(@RequestParam username: String): ResponseEntity<Boolean> {
+        val usernameDisponible = userService.validarUsername(username)
+        if (!usernameDisponible)
+            return ResponseEntity.badRequest().build()
+        return ResponseEntity.ok(usernameDisponible)
+    }
+
+    @GetMapping("/check-email")
+    fun checkEmail(@RequestParam username: String): ResponseEntity<Boolean> {
+        val usernameDisponible = userService.validarMail(username)
+        if (!usernameDisponible)
+            return ResponseEntity.badRequest().build()
+        return ResponseEntity.ok(usernameDisponible)
+    }
+
     @GetMapping
     fun getAllUsers(): ResponseEntity<Any> {
         val result = userService.retrieveAllUser()

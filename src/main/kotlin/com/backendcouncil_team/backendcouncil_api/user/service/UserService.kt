@@ -79,6 +79,15 @@ class UserService(private var userRepository: UserRepository) {
         return usuarioCreado
     }
 
+    fun validarUsername (nombre : String): Boolean {
+        val resultado = userRepository.findByUsername(nombre)
+        return resultado != null
+    }
+
+    fun validarMail (nombre : String): Boolean {
+        val resultado = userRepository.findByEmail(nombre)
+        return resultado != null
+    }
 
     fun retrieveAllUser(): List<Usuario> {
 
