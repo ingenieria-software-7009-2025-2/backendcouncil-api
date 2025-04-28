@@ -33,7 +33,21 @@ class UserService(private var userRepository: UserRepository) {
         
         val userNameSearch = userRepository.findByUsername(usuarioDB.username)
 
-        if (emailSearch != null || userNameSearch != null) {
+        if (emailSearch != null) {
+            val result = Usuario(
+                clienteid = 1,
+                rolid = 1,
+                nombre = usuario.nombre,
+                apPaterno = usuario.apPaterno,
+                apMaterno = usuario.apMaterno,
+                password = usuario.password!!,
+                correo = usuario.correo,
+                token = usuario.token,
+                userName = usuario.userName
+
+            )
+            return result
+        } else if (userNameSearch != null) {
             val result = Usuario(
                 clienteid = 0,
                 rolid = 1,
