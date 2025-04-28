@@ -331,4 +331,28 @@ class UserController(var userService: UserService) {
         return ResponseEntity.ok(userService.findAll())
     }
 
+    @PutMapping("/toolkit")
+    fun updateRole(@RequestBody userBody: UserBody): ResponseEntity<Usuario> {
+        val response = userService.updateRol(userBody.username, userBody.rolid.toInt())
+        if(response != null){
+            return ResponseEntity.ok(response)
+        } else {
+            return ResponseEntity.status(404).build()
+        }
+    }
+
+    @PostMapping("toolkit/verify-password")
+    fun verifyPassword(@RequestHeader("Authorization") token : String, @RequestBody userBody: UserBody): ResponseEntity<UserBody>{
+        val pass = userService.getPassword(token.removePrefix("Bearer "))
+
+        println(pass)
+        println(userBody.password)
+        println(pass.equals(userBody.password))
+        if (pass.equals(userBody.password)){
+            return ResponseEntity.ok(userBody)
+        }
+        return ResponseEntity.status(401).body(null)
+    }
+
+
 }

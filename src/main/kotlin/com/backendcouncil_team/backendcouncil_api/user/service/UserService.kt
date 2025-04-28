@@ -122,6 +122,7 @@ class UserService(private var userRepository: UserRepository) {
         return response
     }
 
+
     fun login(mail: String, password: String): Usuario? {
         val userFound = userRepository.findByEmailAndPassword(mail, password)
 
@@ -257,6 +258,49 @@ class UserService(private var userRepository: UserRepository) {
 
     }
 
+    fun updateRol (username : String, rol : Int ) : Usuario {
+        val userFound = userRepository.findByUsername(username)
+        if (userFound != null) {
+            val newUser = User(
+                clienteid = userFound.clienteid,
+                rolid = rol,
+                username = userFound.username,
+                nombre = userFound.nombre,
+                apPaterno = userFound.apPaterno,
+                apMaterno = userFound.apMaterno,
+                mail = userFound.mail,
+                password = userFound.password,
+                token = userFound.token,
+                )
+            userRepository.save(newUser)
+
+            return Usuario(
+                clienteid = newUser.clienteid,
+                rolid = newUser.rolid,
+                nombre = newUser.nombre,
+                apPaterno = newUser.apPaterno,
+                apMaterno = newUser.apMaterno,
+                correo =  newUser.mail,
+                password = "*******",
+                token = newUser.token,
+                userName =  newUser.username,
+            )
+        } else {
+            userFound
+        }
+        return Usuario(
+            clienteid = 0,
+            rolid = 0,
+            nombre = "",
+            apPaterno = "",
+            apMaterno = "",
+            correo =  "",
+            password = "*******",
+            token = "",
+            userName =  "",
+        )
+    }
+
     fun castUser (user: User) : Usuario {
         return Usuario(
             clienteid = user.clienteid,
@@ -270,6 +314,11 @@ class UserService(private var userRepository: UserRepository) {
             userName = user.username,
             isActive = false
         )
+    }
+
+    fun getPassword(token : String) : String{
+        val respuesta =  userRepository.findByToken(token)
+        return respuesta?.password ?: ""
     }
 
 }
