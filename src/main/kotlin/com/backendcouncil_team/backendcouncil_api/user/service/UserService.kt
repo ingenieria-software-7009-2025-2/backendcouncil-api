@@ -250,7 +250,6 @@ class UserService(private var userRepository: UserRepository) {
         lista.forEach{
             user ->
             respuesta.add(castUser(user))
-            print(user.mail)
         }
 
         return  respuesta
