@@ -51,6 +51,41 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
 
     }
 
+    fun findbyIncidentId(id : Long) : Incidente? {
+        val response = incidentRepository.findByIncidentId(id)
+        if (response != null) {
+            return castIncident(response)
+        }
+        return null
+    }
+
+    fun updateStatus(id: Long, status: String) : Incidente? {
+        val afectado = findbyIncidentId(id)
+
+        if (afectado != null) {
+            afectado.estado = status
+            val newIncident = Incident(
+                incidenteid = id,
+                clienteid = afectado.clienteid,
+                categoriaid = afectado.categoriaid,
+                nombre = afectado.nombre,
+                descripcion = afectado.descripcion,
+                fecha = afectado.fecha,
+                hora = afectado.hora,
+                longitud = afectado.longitud,
+                latitud = afectado.latitud,
+                estado = afectado.estado
+            )
+            incidentRepository.save(newIncident)
+            return afectado
+        }
+        return null
+    }
+
+    fun deleteIncident(id : Long) : Int {
+        return incidentRepository.deleteIncident(id)
+    }
+
     fun castIncident(incident :Incident) : Incidente {
         return Incidente(
             incidenteid =  incident.incidenteid,
