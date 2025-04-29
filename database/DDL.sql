@@ -100,7 +100,7 @@ ALTER TABLE Gestionar ALTER COLUMN ClienteID SET NOT NULL;
 ALTER TABLE Incidente ADD CONSTRAINT pk_incidente PRIMARY KEY (IncidenteID);
 
 -- LLAVES PRIMARIAS TABLA FOTO
-ALTER TABLE Foto ADD CONSTRAINT pk_foto PRIMARY KEY (FotoID, IncidenteID);
+
 
 -- LLAVES PRIMARIAS ROL
 ALTER TABLE Rol ADD CONSTRAINT pk_rol PRIMARY KEY (RolID);
@@ -156,8 +156,7 @@ COMMENT ON CONSTRAINT fk_incidente_cliente ON Incidente IS 'Llave foranea que re
 COMMENT ON TABLE Foto IS 'Tabla que contiene las fotos del incidente.';
 COMMENT ON COLUMN Foto.FotoID IS 'Identificador unico de la foto.';
 COMMENT ON COLUMN Foto.IncidenteID IS 'Identificador unico proveniente del incidente.';
-COMMENT ON CONSTRAINT pk_foto ON Foto IS 'Llave primaria que identifica una Foto.';
-COMMENT ON CONSTRAINT fk_foto_incidente ON Foto IS 'Llave foranea que referencia el Incidente al que retrata o se le es relevante la Foto';
+
 
 --Cliente
 COMMENT ON TABLE Cliente IS 'Tabla que contiene los datos del cliente';
@@ -196,12 +195,18 @@ COMMENT ON COLUMN Rol.Nombre IS 'Nombre del rol que se puede asignar.';
 COMMENT ON CONSTRAINT pk_rol on Rol IS 'Restricciones de llave primaria.';
 
 insert into categoria (categoriaid, categoria)
-values(246832,'baches');
+values
+(1,'Bache en la via'),
+(2,'ALumbardo publico'),
+(3,'Basura acumulada'),
+(4,'Fuga de agua'),
+(5,'vandalismo'),
+(6,'Otro'),
+(246832,'baches');
 
 insert into rol (rolid, nombre)
 values
-(1, 'Cliente usuario sin sesion'),
-(2, 'Cliente usuario con sesion'),
-(3, 'Cliente usuario postulado a administrador'),
-(4, 'Cliente administrador'),
-(5, 'SUDO');
+(1, 'USUARIO'),
+(2, 'CANDIDATO'),
+(3, 'ADMIN'),
+(4, 'SUDO');
