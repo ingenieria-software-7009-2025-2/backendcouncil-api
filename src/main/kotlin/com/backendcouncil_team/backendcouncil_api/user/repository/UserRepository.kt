@@ -57,4 +57,8 @@ interface UserRepository : CrudRepository<User, Int> {
     @Transactional
     @Query(value = "DELETE FROM cliente WHERE correo=?1 AND password=?2 AND token=?3", nativeQuery = true)
     fun deleteUser(email : String,password: String,token: String): Int
+
+    @Query(value = "SELECT * FROM cliente", nativeQuery = true)
+    override fun findAll(): List<User>
 }
+
