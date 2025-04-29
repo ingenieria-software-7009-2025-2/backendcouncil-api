@@ -5,8 +5,17 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
+/**
+ * Clase que establece la configuración Cross-Origin Resource Sharing y su seguridad para nuestro sitio web.
+ */
+
 @Configuration
 class CorsConfig {
+
+    /**
+     * Función que regresa un configurador.
+     * @return El configurador customizado para nuestra aplicación.
+     */
     @Bean
     fun corsConfigurer(): WebMvcConfigurer {
         return object : WebMvcConfigurer {

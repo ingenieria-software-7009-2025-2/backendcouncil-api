@@ -2,6 +2,7 @@ package com.backendcouncil_team.backendcouncil_api.incident.controller
 
 
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.IncidentBody
+import com.backendcouncil_team.backendcouncil_api.incident.controller.body.UpdateBody
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
@@ -15,13 +16,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * Controlador para gestionar las operaciones relacionadas con cada incidente.
+ * @property incidentService
+ * @property userService
  */
 @Controller
 @RequestMapping("/v1/incident")
@@ -39,14 +39,6 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     @Operation(
         summary = "Registra un incidente",
         description = "Usando los datos brindados, registra un incidente.",
-        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Datos del incidente",
-            required = true,
-            content = [Content(
-                schema = Schema(implementation = IncidentBody::class)
-            )]
-        )
-        /**
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -62,7 +54,6 @@ class IncidentController(var incidentService: IncidentService,var userService: U
                 content = [Content()]
             ),
         ]
-        */
 
     )
     @PostMapping
@@ -71,7 +62,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
 
         val incident = Incidente(
             clienteid = user?.clienteid!!,
-            nombre =  incidentBody.nombre,
+            nombre =  incidentBody.nombre!!,
             descripcion =  incidentBody.descripcion,
             fecha = incidentBody.fecha,
             hora =  incidentBody.hora,
@@ -89,5 +80,30 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             )
 
         } else return ResponseEntity.notFound().build()
+    }
+    
+    @GetMapping("/toolkit")
+    fun getAll(): ResponseEntity<List<Incidente>>{
+        return ResponseEntity.ok(incidentService.findAll())
+    }
+
+    @PutMapping("/toolkit")
+    fun updateStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Incidente> {
+        val response =  incidentService.updateStatus(updateBody.incidenteid!!,updateBody.estatus)
+        println(updateBody.incidenteid!!)
+        println(updateBody.estatus)
+        if (response != null) {
+            return ResponseEntity.ok(response)
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+    @DeleteMapping("/toolkit")
+    fun deleteStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
+        val response = incidentService.deleteIncident(updateBody.incidenteid!!)
+        if (response != null) {
+            return ResponseEntity.ok(response)
+        }
+        return ResponseEntity.notFound().build()
     }
 }

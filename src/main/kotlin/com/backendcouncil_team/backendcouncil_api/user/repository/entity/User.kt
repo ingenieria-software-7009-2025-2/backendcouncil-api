@@ -2,6 +2,19 @@ package com.backendcouncil_team.backendcouncil_api.user.repository.entity
 
 import jakarta.persistence.*
 
+/**
+ * Entidad referente a clientes/usuarios provenientes del modelo.
+ * @property clienteid ID del usuario.
+ * @property nombre Nombre del Usuario.
+ * @property rolid ID del rol del usuario.
+ * @property username Nombre de Usuario del mismo.
+ * @property apPaterno Apellido paterno del usuario.
+ * @property apMaterno Apellido materno del usuario.
+ * @property mail Correo electrónico del usuario.
+ * @property token Tóken del usuario.
+ * @property password Contraseña del usuario.
+ */
+
 @Entity
 @Table(name = "cliente")
 class User constructor(

@@ -3,6 +3,20 @@ package com.backendcouncil_team.backendcouncil_api.incident.repository.entity
 import jakarta.persistence.*
 import java.math.BigDecimal
 
+/**
+* Entidad referente a incidentes provenientes del modelo.
+ * @property incidenteid ID del incidente
+ * @property clienteid ID del reportador.
+ * @property categoriaid ID de la categoría del incidente.
+ * @property nombre Nombre del incidente.
+ * @property descripcion Descripción del incidente.
+ * @property fecha Fecha del incidente.
+ * @property hora Hora del incidente.
+ * @property latitud Latitud del incidente.
+ * @property longitud Longitud del incidente.
+ * @property estado Estado del incidente.
+*/
+
 @Entity
 @Table(name = "incidente")
 class Incident constructor(
