@@ -9,8 +9,17 @@ import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.GroupedOpenApi
 
+/**
+ * Clase que establece la configuración de la documentación con OpenAPI.
+ */
+
 @Configuration
 class SwaggerConfig {
+
+    /**
+     * Función que regresa una instancia OpenAPI customizada.
+     * @return instancia OpenAPI customizada a nuestra conveniencia.
+     */
 
     @Bean
     fun customOpenAPI(): OpenAPI {
@@ -18,7 +27,7 @@ class SwaggerConfig {
             .info(
                 Info()
                     .title("SISREP - Sistema de Reportes Urbanos - API")
-                    .version("1.0.0")
+                    .version("1.1.3")
                     .description("Esta es la API para SISREP en un primer acercamiento.")
                     .contact(
                         Contact()
@@ -38,6 +47,11 @@ class SwaggerConfig {
             )
     }
 
+
+    /**
+     * Función que regresa el grupo de varias OpenAPI's, a través de un builder.
+     * @return el grupo de varias OpenAPI's.
+     */
     @Bean
     fun publicApi() : GroupedOpenApi {
         return GroupedOpenApi.builder()

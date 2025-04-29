@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*
 
 /**
  * Controlador para gestionar las operaciones relacionadas con cada incidente.
+ * @property incidentService
+ * @property userService
  */
 @Controller
 @RequestMapping("/v1/incident")
@@ -37,14 +39,6 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     @Operation(
         summary = "Registra un incidente",
         description = "Usando los datos brindados, registra un incidente.",
-        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Datos del incidente",
-            required = true,
-            content = [Content(
-                schema = Schema(implementation = IncidentBody::class)
-            )]
-        )
-        /**
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -60,7 +54,6 @@ class IncidentController(var incidentService: IncidentService,var userService: U
                 content = [Content()]
             ),
         ]
-        */
 
     )
     @PostMapping

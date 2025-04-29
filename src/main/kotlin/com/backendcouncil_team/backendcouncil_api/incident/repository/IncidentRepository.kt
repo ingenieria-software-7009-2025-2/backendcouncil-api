@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
+/**
+ * Interfaz donde las funciones buscan realizar operaciones CRUD al modelo relacionado con incidentes con query's buscando una response.
+ */
+
 interface IncidentRepository: CrudRepository<Incident, Int> {
 
     @Query(value = "SELECT * FROM incidente", nativeQuery = true)
