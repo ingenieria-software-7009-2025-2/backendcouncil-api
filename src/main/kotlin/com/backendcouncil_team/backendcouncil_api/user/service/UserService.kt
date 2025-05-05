@@ -9,14 +9,14 @@ import java.time.Instant
 import java.util.UUID
 
 /**
- * Clase de servicio referente a clientes/usuarios.
+ * Clase de servicio de gestión de operaciones referentes a clientes/usuarios.
  * @property userRepository Repository que contiene las queries.
  */
 @Service
 class UserService(private var userRepository: UserRepository) {
 
     /**
-     * Función usada para agregar un usuario.
+     * Función para agregar un usuario.
      * @param usuario Dominio de un cliente/usuario.
      * @return Dominio del usuario creado.
      */
@@ -88,52 +88,31 @@ class UserService(private var userRepository: UserRepository) {
     }
 
     /**
-     * Función que regresa a todos los usuarios.
-     * @return Lista de dominios de usuarios.
+     * Función que comprueba si un nombre de usuario ya existe
+     * @param nombre Nombre de usuario.
+     * @return `TRUE` si existe, `FALSE` en otro caso.
      */
     fun validarUsername (nombre : String): Boolean {
         val resultado = userRepository.findByUsername(nombre)
         return resultado != null
     }
 
+    /**
+     * Función que comprueba si un email ya existe
+     * @param nombre Nombre de usuario.
+     * @return `TRUE` si existe, `FALSE` en otro caso.
+     */
     fun validarMail (nombre : String): Boolean {
         val resultado = userRepository.findByEmail(nombre)
         return resultado != null
     }
 
 
-    fun retrieveAllUser(): List<Usuario> {
-
-        val myUsers = mutableListOf<Usuario>()
-
-        val result = userRepository.findAll()
-
-        result.forEach { user: User ->
-            // Convertimos el objeto de nuestra BD a un objeto de nuestro dominio.
-            val userFound = Usuario(
-                clienteid = user.clienteid,
-                rolid = user.rolid,
-                nombre = user.nombre,
-                apPaterno = user.apPaterno,
-                apMaterno = user.apMaterno,
-                correo = user.mail,
-                token = user.token,
-                password = user.password,
-                userName = user.username,
-                isActive = false
-            )
-
-            myUsers.add(userFound)
-        }
-
-        return myUsers
-    }
-
     /**
-     * Función que borra un usuario.
+     * Función para borrar un usuario.
      * @param mail email del usuario a eliminar.
      * @param password contraseña del usuario a eliminar.
-     * @param token token del Usuario a eliminar.
+     * @param token token del usuario a eliminar.
      * @return Dominio de usuario recién borrado o `NULL` si no se encontró o no se pudo autenticar.
      */
     fun delete(mail:String, password: String, token: String) : Int {
@@ -144,8 +123,8 @@ class UserService(private var userRepository: UserRepository) {
 
 
     /**
-     * Hace un intento de log-in sobre los datos brindados.
-     * @param user Nombre de usuario potencial.
+     * Hace un intento de log-in utilizando el mail.
+     * @param mail Correo electrónico del usuario potencial.
      * @param password Contraseña del usuario potencial.
      * @return Dominio de usuario creado o `NULL` si no fue exitoso.
      */
@@ -206,7 +185,7 @@ class UserService(private var userRepository: UserRepository) {
     }
 
     /**
-     * Función que updatea el token de un usuario.
+     * Función que actualiza el token de un usuario.
      * @param user Entidad de usuario con los nuevos datos.
      * @param token Tóken nuevo.
      */
@@ -233,7 +212,7 @@ class UserService(private var userRepository: UserRepository) {
     }
 
     /**
-     * Regresa toda la información de un cliente dado un tóken.
+     * Regresa toda la información de un cliente.
      * @param token Tóken del usuario.
      * @return Dominio de usuario.
      */
@@ -304,7 +283,11 @@ class UserService(private var userRepository: UserRepository) {
     fun obtenerNoVacio(primero: String, segundo: String): String {
         return if (primero.isNotEmpty()) primero else segundo
     }
-
+    
+    /**
+     * Función que regresa todos los usuarios.
+     * @return Lista de usuarios.
+     */
     fun findAll(): List<Usuario> {
         val lista = userRepository.findAll()
         val respuesta : MutableList<Usuario> = mutableListOf()
@@ -314,10 +297,45 @@ class UserService(private var userRepository: UserRepository) {
         }
 
         return  respuesta
-
-
     }
 
+    /**
+     * Función que regresa todos los usuarios. (Forma antigua)
+     * @return Lista de usuarios.
+     */
+    fun retrieveAllUser(): List<Usuario> {
+
+        val myUsers = mutableListOf<Usuario>()
+
+        val result = userRepository.findAll()
+
+        result.forEach { user: User ->
+            // Convertimos el objeto de nuestra BD a un objeto de nuestro dominio.
+            val userFound = Usuario(
+                clienteid = user.clienteid,
+                rolid = user.rolid,
+                nombre = user.nombre,
+                apPaterno = user.apPaterno,
+                apMaterno = user.apMaterno,
+                correo = user.mail,
+                token = user.token,
+                password = user.password,
+                userName = user.username,
+                isActive = false
+            )
+
+            myUsers.add(userFound)
+        }
+
+        return myUsers
+    }
+
+    /**
+     * Función que actualiza el rol de un usuario.
+     * @param username Nombre de usuario.
+     * @param rol Rol nuevo.
+     * @return Dominio de usuario actualizado.
+     */
     fun updateRol (username : String, rol : Int ) : Usuario {
         val userFound = userRepository.findByUsername(username)
         if (userFound != null) {
@@ -346,7 +364,7 @@ class UserService(private var userRepository: UserRepository) {
                 userName =  newUser.username,
             )
         } else {
-            userFound
+            userFound   
         }
         return Usuario(
             clienteid = 0,
@@ -361,6 +379,11 @@ class UserService(private var userRepository: UserRepository) {
         )
     }
 
+    /**
+     * Función que convierte un objeto de la base de datos a un objeto del dominio.
+     * @param user Objeto usuario recibido de la base de datos.
+     * @return Objeto del dominio.
+     */
     fun castUser (user: User) : Usuario {
         return Usuario(
             clienteid = user.clienteid,
@@ -376,6 +399,11 @@ class UserService(private var userRepository: UserRepository) {
         )
     }
 
+    /**
+     * Función que regresa la contraseña de un usuario.
+     * @param token Tóken del usuario.
+     * @return Contraseña del usuario.
+     */
     fun getPassword(token : String) : String{
         val respuesta =  userRepository.findByToken(token)
         return respuesta?.password ?: ""

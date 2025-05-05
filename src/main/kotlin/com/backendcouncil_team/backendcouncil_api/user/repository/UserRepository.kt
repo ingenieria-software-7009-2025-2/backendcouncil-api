@@ -12,7 +12,7 @@ import org.springframework.data.repository.CrudRepository
 interface UserRepository : CrudRepository<User, Int> {
 
     /**
-     * Función que busca un cliente por email.
+     * Función que busca un cliente vía email.
      * @param email Correo electrónico del cliente a buscar.
      * @return Entidad si se encontró o `NULL` si el cliente no existe.
      */
@@ -20,7 +20,7 @@ interface UserRepository : CrudRepository<User, Int> {
     fun findByEmail(email: String): User?
 
     /**
-     * Función que busca un cliente por username.
+     * Función que busca un cliente vía username.
      * @param username Nombre de usuario del cliente a buscar.
      * @return Entidad si se encontró o `NULL` si el cliente no existe.
      */
@@ -28,7 +28,7 @@ interface UserRepository : CrudRepository<User, Int> {
     fun findByUsername(username: String): User?
 
     /**
-     * Función que busca un cliente por email y password.
+     * Función que busca un cliente vía email y password.
      * @param email Correo electrónico del cliente a buscar.
      * @param password Contraseña del cliente a buscar.
      * @return Entidad si se encontró o `NULL` si el cliente no existe.
@@ -37,7 +37,7 @@ interface UserRepository : CrudRepository<User, Int> {
     fun findByEmailAndPassword(email: String, password: String): User?
 
     /**
-     * Función que busca un cliente por tóken.
+     * Función que busca un cliente vía tóken.
      * @param token Tóken del cliente a buscar.
      * @return Entidad si se encontró o `NULL` si el cliente no existe.
      */
@@ -45,7 +45,7 @@ interface UserRepository : CrudRepository<User, Int> {
     fun findByToken(token: String): User?
 
     /**
-     * Función que busca un cliente por username y contraseña.
+     * Función que busca un cliente vía username y contraseña.
      * @param email Nombre de usuario del cliente a buscar.
      * @param password Contraseña del cliente a buscar.
      * @return Entidad si se encontró o `NULL` si el cliente no existe.
