@@ -53,11 +53,22 @@ interface UserRepository : CrudRepository<User, Int> {
     @Query(value = "SELECT * FROM cliente WHERE username=?1 AND password=?2", nativeQuery = true)
     fun findByUserAndPassword(email: String, password: String): User?
 
+    /**
+     * Función que elimina a un cliente vía email, contraseña y token.
+     * @param email Correo electrónico del cliente a buscar.
+     * @param password Contraseña del cliente a buscar.
+     * @param token Tóken del cliente a buscar.
+     * @return `1` si se eliminó el cliente o `0` si no se encontró.
+     */
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM cliente WHERE correo=?1 AND password=?2 AND token=?3", nativeQuery = true)
     fun deleteUser(email : String,password: String,token: String): Int
 
+    /**
+     * Función que busca a todos los clientes junto con su información.
+     * @return Lista de usuarios.
+     */
     @Query(value = "SELECT * FROM cliente", nativeQuery = true)
     override fun findAll(): List<User>
 }

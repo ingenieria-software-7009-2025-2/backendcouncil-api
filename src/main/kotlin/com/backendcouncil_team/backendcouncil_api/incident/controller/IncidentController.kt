@@ -101,7 +101,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     @DeleteMapping("/toolkit")
     fun deleteStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
         val response = incidentService.deleteIncident(updateBody.incidenteid!!)
-        if (response != null) {
+        if (response != 0) {
             return ResponseEntity.ok(response)
         }
         return ResponseEntity.notFound().build()

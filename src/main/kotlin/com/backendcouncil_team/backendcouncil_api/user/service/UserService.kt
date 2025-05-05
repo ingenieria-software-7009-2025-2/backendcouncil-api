@@ -154,7 +154,7 @@ class UserService(private var userRepository: UserRepository) {
     }
 
     /**
-     * Hace un intento de log-in sobre los datos brindados.
+     * Función para realizar intento de log-in sobre los datos brindados.
      * @param user Nombre de usuario potencial.
      * @param password Contraseña del usuario potencial.
      * @return Dominio de usuario creado o `NULL` si no fue exitoso.
