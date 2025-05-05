@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
 
-
+/**
+ * Controlador para gestionar las operaciones relacionadas a fotos.
+ * @property photoService Instancia de la clase servicio que contiene la lógica para las operaciones de fotos.
+ */
 @Controller
 @RequestMapping("/v1/photos")
 class PhotoController(var photoService: PhotoService) {

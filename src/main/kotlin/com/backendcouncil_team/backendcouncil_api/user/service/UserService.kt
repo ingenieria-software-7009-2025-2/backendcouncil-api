@@ -296,7 +296,7 @@ class UserService(private var userRepository: UserRepository) {
             respuesta.add(castUser(user))
         }
 
-        return  respuesta
+        return respuesta
     }
 
     /**
