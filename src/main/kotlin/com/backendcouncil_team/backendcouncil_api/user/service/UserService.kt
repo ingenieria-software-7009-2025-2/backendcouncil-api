@@ -244,8 +244,6 @@ class UserService(private var userRepository: UserRepository) {
     fun update (token: String, usuario: Usuario): Usuario? {
         val userFound = userRepository.findByToken(token)
         if (userFound != null) {
-            println("de postman: " + usuario.userName)
-            println(userFound.username)
             val newUser = User(
                 clienteid = userFound.clienteid,
                 rolid = userFound.rolid,

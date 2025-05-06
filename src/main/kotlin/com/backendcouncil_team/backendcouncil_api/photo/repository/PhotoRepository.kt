@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 /**
- * Interfaz que contiene las operaciones CRUD y queries para el manejo de las fotos en la base de datos.
+ * Interfaz que contiene las operaciones CRUD disponibles y queries para el manejo de las fotos en la base de datos.
  */
 interface PhotoRepository : CrudRepository<Photo, Long> {
     /**

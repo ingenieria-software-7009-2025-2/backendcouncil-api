@@ -33,7 +33,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
                 hora = incidente.hora,
                 longitud = incidente.longitud,
                 latitud = incidente.latitud,
-                estado = incidente.estado
+                estado = "reportado"
             )
         val result = incidentRepository.save(incidentDB)
 
@@ -50,6 +50,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             estado = result.estado
         )
     }
+
     /**
      * Función que obtiene todos los incidentes.
      * @return Lista de incidentes.
@@ -65,6 +66,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return respuesta
 
     }
+
     /**
      * Función que obtiene un incidente por su ID.
      * @param id ID del incidente a buscar.
@@ -77,6 +79,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         }
         return null
     }
+
     /**
      * Función que actualiza el estado de un incidente.
      * @param id ID del incidente a actualizar.

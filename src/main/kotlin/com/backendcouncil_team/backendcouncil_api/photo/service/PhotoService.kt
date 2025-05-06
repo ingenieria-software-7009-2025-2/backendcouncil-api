@@ -36,6 +36,7 @@ class PhotoService(private var photoRepository: PhotoRepository) {
 
         return respuesta
     }
+
     /**
      * Función que agrega una foto a un incidente.
      * @param photo Dominio de foto con la información a agregar.
@@ -47,7 +48,6 @@ class PhotoService(private var photoRepository: PhotoRepository) {
             fotoid = photo.fotoid,
             incideteid = photo.incidenteid.toLong()
         )
-        println("antes de hacer la query")
         val result = photoRepository.save(foto)
 
         return Foto(

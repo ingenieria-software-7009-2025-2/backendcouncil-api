@@ -10,5 +10,4 @@ import org.springframework.data.jpa.repository.Query
 data class Foto(
     var fotoid: ByteArray? = null,
     var incidenteid: Long? = null
-) {
-}
+) {}

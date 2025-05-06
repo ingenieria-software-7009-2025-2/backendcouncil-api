@@ -1,5 +1,6 @@
 package com.backendcouncil_team.backendcouncil_api.user.controller.body
 
+import ch.qos.logback.core.net.server.Client
 
 /**
  * Clase que simula el body, por sus datos; para uso general de un cliente/usuario.
@@ -9,10 +10,9 @@ package com.backendcouncil_team.backendcouncil_api.user.controller.body
  * @property password Contraseña de la cuenta a crear del usuario.
  * @property correo Correo de la cuenta a crear del usuario.
  * @property username Nombre de usuario de la cuenta a crear del usuario.
+ * @property rolid Identificador del rol
+ * @property clienteid Identificador propio del usuario
  */
-
-import ch.qos.logback.core.net.server.Client
-
 data class UserBody(
     var nombre: String = "",
     var apPaterno: String = "",
