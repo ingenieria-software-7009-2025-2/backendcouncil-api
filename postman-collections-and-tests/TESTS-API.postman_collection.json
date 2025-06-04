@@ -1,0 +1,1594 @@
+{
+	"info": {
+		"_postman_id": "120accf4-3bee-4dff-815c-c8877371c79e",
+		"name": "3raIteracion",
+		"description": "# TEST para 3RA ITERACIÓN\n\nRecomendable correr con _delay de 1000ms_ entre tests c:\n\nRecomendable no dejar guardadas las variables.\n\nLos tests están diseñados para que la BD quede limpia después de la ejecución.\n\nSi se modifica `User` o `Incident`, se deben modificar las pruebas.\n\nEl alcance de las pruebas esta directamente relacionado con mi conocimiento de JavaScript :P.\n\n\\-- CCWebi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39319939"
+	},
+	"item": [
+		{
+			"name": "PRUEBA_addUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(2);\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.eql(null);\r",
+							"    pm.expect(json.password).to.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"correo\", json.correo);\r",
+							"pm.collectionVariables.set(\"username\", json.userName)\r",
+							"pm.collectionVariables.set(\"contraseña\", json.password);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"silson\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"silson@hollowmail.edu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_addUser_sameMail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 407\", function () {\r",
+							"    pm.response.to.have.status(407);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"diff\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"silson@hollowmail.edu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_addUser_sameUserName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 406\", function () {\r",
+							"    pm.response.to.have.status(406);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"silson\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"ada_lovelace@math.uk\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_login_username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(2);\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.not.eql(null);\r",
+							"    pm.expect(json.password).to.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"token\", json.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\" : \"{{username}}\",\r\n    \"password\" : \"{{contraseña}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_user_Me",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(2);\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.eql(\"*******\");\r",
+							"    pm.expect(json.password).to.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/users/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_put_rol",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(4);\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.not.eql(\"*******\");\r",
+							"    pm.expect(json.token).to.not.eql(null);\r",
+							"    pm.expect(json.password).to.not.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"{{username}}\",\r\n    \"rolid\" : \"4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/toolkit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"toolkit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_put",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(4);\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Comas\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Labonne\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.not.eql(\"*******\");\r",
+							"    pm.expect(json.token).to.not.eql(null);\r",
+							"    pm.expect(json.password).to.not.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set(\"username\", json.userName);\r",
+							"pm.collectionVariables.set(\"correo\", json.correo);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\" : \"Comas\",\r\n  \"apPaterno\" : \"Labonne\",\r\n  \"rolid\" : \"3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.text().localeCompare(\"Sesión finalizada\");\r",
+							"});\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"// Temporales\r",
+							"pm.collectionVariables.set(\"correoTEMP\", pm.collectionVariables.get(\"correo\"));\r",
+							"pm.collectionVariables.set(\"contraseñaTEMP\", pm.collectionVariables.get(\"contraseña\"))\r",
+							"pm.collectionVariables.unset(\"token\");\r",
+							"pm.collectionVariables.unset(\"correo\");\r",
+							"pm.collectionVariables.unset(\"contraseña\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/users/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_addUser2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(2);\r",
+							"    pm.expect(json.userName).to.eql(\"kyogre235\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Emma\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Lauda\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Lovelace\");\r",
+							"    pm.expect(json.correo).to.eql(\"emma@complejidad.mx\");\r",
+							"    pm.expect(json.token).to.eql(null);\r",
+							"    pm.expect(json.password).to.eql(\"m4rYti3rr*\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"correo\", json.correo);\r",
+							"pm.collectionVariables.set(\"username\", json.userName)\r",
+							"pm.collectionVariables.set(\"contraseña\", json.password);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Emma\",\r\n  \"username\": \"kyogre235\",\r\n  \"apPaterno\": \"Lauda\",\r\n  \"apMaterno\": \"Lovelace\",\r\n  \"password\": \"m4rYti3rr*\",\r\n  \"correo\": \"emma@complejidad.mx\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_login_correo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.rolid).to.eql(2);\r",
+							"    pm.expect(json.userName).to.eql(\"kyogre235\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Emma\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Lauda\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Lovelace\");\r",
+							"    pm.expect(json.correo).to.eql(\"emma@complejidad.mx\");\r",
+							"    pm.expect(json.token).to.not.eql(null);\r",
+							"    pm.expect(json.password).to.eql(\"m4rYti3rr*\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"token\", json.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\" : \"{{correo}}\",\r\n    \"password\" : \"{{contraseña}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.incidenteid).to.not.eql(null);\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.categoriaid).to.eql(246832);\r",
+							"    pm.expect(json.nombre).to.eql(\"Bache\");\r",
+							"    pm.expect(json.descripcion).to.eql(\"Bache C. Silson, Esq. Jolounai\");\r",
+							"    pm.expect(json.fecha).to.eql(\"2025-02-12\");\r",
+							"    pm.expect(json.hora).to.eql(\"15:30:00\");\r",
+							"    pm.expect(json.latitud).to.eql(19.566688);\r",
+							"    pm.expect(json.longitud).to.eql(99.138437);\r",
+							"    pm.expect(json.estado).to.eql(\"reportado\");\r",
+							"});\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"incidenteid\", json.incidenteid);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"nombre\" : \"Bache\",\r\n    \"descripcion\" : \"Bache C. Silson, Esq. Jolounai\",\r\n    \"fecha\" : \"2025-02-12\",\r\n    \"hora\" : \"15:30:00\",\r\n    \"latitud\": \"19.566688\",\r\n    \"longitud\": \"99.138437\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.incidenteid).to.not.eql(null);\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.categoriaid).to.eql(246832);\r",
+							"    pm.expect(json.nombre).to.eql(\"Bache\");\r",
+							"    pm.expect(json.descripcion).to.eql(\"Bache C. Silson, Esq. Jolounai\");\r",
+							"    pm.expect(json.fecha).to.eql(\"2025-02-12\");\r",
+							"    pm.expect(json.hora).to.eql(\"15:30:00\");\r",
+							"    pm.expect(json.latitud).to.eql(19.57);\r",
+							"    pm.expect(json.longitud).to.eql(99.14);\r",
+							"    pm.expect(json.estado).to.eql(\"en revision\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident/toolkit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident",
+						"toolkit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_getAll_incidents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Integridad de llaves\", function () {\r",
+							"    require('lodash').each((json.data), (incidente)=>{\r",
+							"        pm.expect(incidente.to.have.property(\"incidenteid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"clienteid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"categoriaid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"nombre\"));\r",
+							"        pm.expect(incidente.to.have.property(\"descripcion\"));\r",
+							"        pm.expect(incidente.to.have.property(\"fecha\"));\r",
+							"        pm.expect(incidente.to.have.property(\"hora\"));\r",
+							"        pm.expect(incidente.to.have.property(\"latitud\"));\r",
+							"        pm.expect(incidente.to.have.property(\"longitud\"));\r",
+							"        pm.expect(incidente.to.have.property(\"estado\"));\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident/toolkit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident",
+						"toolkit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_delete_incident",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.text().localeCompare(\"1\");\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.unset(\"incidenteid\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"resuelto\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident/toolkit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident",
+						"toolkit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_check_username_ocupado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.text().localeCompare(\"true\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/check-username?username={{username}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"check-username"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_check_username_disponible",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 400\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/check-username?username={{username}}12345",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"check-username"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{username}}12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_check_email_ocupado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.text().localeCompare(\"true\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/check-email?username={{correo}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"check-email"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{correo}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_check_email_disponible",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 400\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/check-email?username={{correo}}12345",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"check-email"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{correo}}12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_verify_password_correcta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"nombre\": \"Webi\",\r\n    \"username\": \"silson\",\r\n    \"apPaterno\": \"Torres\",\r\n    \"apMaterno\": \"Santos\",\r\n    \"password\": \"{{contraseña}}\",\r\n    \"correo\": \"silson@hollowmail.edu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/toolkit/verify-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"toolkit",
+						"verify-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_verify_password_incorrecta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 401\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.status(401);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"nombre\": \"Webi\",\r\n    \"username\": \"silson\",\r\n    \"apPaterno\": \"Torres\",\r\n    \"apMaterno\": \"Santos\",\r\n    \"password\": \"{{contraseña}}FAIL\",\r\n    \"correo\": \"silson@hollowmail.edu\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/toolkit/verify-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"toolkit",
+						"verify-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_getAll_users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Integridad de llaves\", function () {\r",
+							"    require('lodash').each((json.data), (incidente)=>{\r",
+							"        pm.expect(incidente.to.have.property(\"clienteid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"rolid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"userName\"));\r",
+							"        pm.expect(incidente.to.have.property(\"nombre\"));\r",
+							"        pm.expect(incidente.to.have.property(\"apPaterno\"));\r",
+							"        pm.expect(incidente.to.have.property(\"apMaterno\"));\r",
+							"        pm.expect(incidente.to.have.property(\"correo\"));\r",
+							"        pm.expect(incidente.to.have.property(\"token\"));\r",
+							"        pm.expect(incidente.to.have.property(\"password\"));\r",
+							"        pm.expect(incidente.to.have.property(\"isActive\"));\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/toolkit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"toolkit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_getAll_users_old",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Integridad de llaves\", function () {\r",
+							"    require('lodash').each((json.data), (incidente)=>{\r",
+							"        pm.expect(incidente.to.have.property(\"clienteid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"rolid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"userName\"));\r",
+							"        pm.expect(incidente.to.have.property(\"nombre\"));\r",
+							"        pm.expect(incidente.to.have.property(\"apPaterno\"));\r",
+							"        pm.expect(incidente.to.have.property(\"apMaterno\"));\r",
+							"        pm.expect(incidente.to.have.property(\"correo\"));\r",
+							"        pm.expect(incidente.to.have.property(\"token\"));\r",
+							"        pm.expect(incidente.to.have.property(\"password\"));\r",
+							"        pm.expect(incidente.to.have.property(\"isActive\"));\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_delete_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.text().localeCompare(\"1\");\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.unset(\"contraseña\")\r",
+							"pm.collectionVariables.unset(\"correo\")\r",
+							"pm.collectionVariables.unset(\"token\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"password\": \"{{contraseña}}\",\r\n  \"correo\": \"{{correo}}\",\r\n  \"token\": \"{{token}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOGIN_first_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"token\", json.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\" : \"{{correoTEMP}}\",\r\n    \"password\" : \"{{contraseñaTEMP}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE_first_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.text().localeCompare(\"1\");\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.unset(\"contraseñaTEMP\")\r",
+							"pm.collectionVariables.unset(\"correoTEMP\")\r",
+							"pm.collectionVariables.unset(\"tokenTEMP\")\r",
+							"\r",
+							"pm.variables.clear();"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"password\": \"{{contraseñaTEMP}}\",\r\n  \"correo\": \"{{correoTEMP}}\",\r\n  \"token\": \"{{token}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "incidentid",
+			"value": ""
+		},
+		{
+			"key": "correo",
+			"value": ""
+		},
+		{
+			"key": "contraseña",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

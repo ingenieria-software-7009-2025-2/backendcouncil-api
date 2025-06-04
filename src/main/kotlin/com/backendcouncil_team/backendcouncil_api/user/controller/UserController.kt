@@ -47,6 +47,14 @@ class UserController(var userService: UserService) {
                 )]
             ),
             ApiResponse(
+                responseCode = "406",
+                description = "usuario existente",
+                content = [Content()]
+            ),ApiResponse(
+                responseCode = "407",
+                description = "correo existente",
+                content = [Content()]
+            ),ApiResponse(
                 responseCode = "400",
                 description = "Ocurrió un error inesperado",
                 content = [Content()]
@@ -75,6 +83,37 @@ class UserController(var userService: UserService) {
     }
 
     /**
+     * Endpoint para obtener la lista de todos los usuarios registrados (old).
+     * @return ResponseEntity con la lista de usuarios.
+     */
+    @Operation(
+        summary = "Regresa a todos los usuarios",
+        description = "Regresa a todos los usuarios registrados",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    array = ArraySchema(
+                        schema = Schema(implementation = Usuario::class)
+                    ),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
+    @GetMapping
+    fun getAllUsers(): ResponseEntity<Any> {
+        val result = userService.retrieveAllUser()
+        return ResponseEntity.ok(result)
+    }
+
+    /**
      * Endpoint para obtener la lista de todos los usuarios registrados.
      * @return ResponseEntity con la lista de usuarios.
      */
@@ -99,27 +138,9 @@ class UserController(var userService: UserService) {
             ),
         ]
     )
-
-    @GetMapping("/check-username")
-    fun checkUsername(@RequestParam username: String): ResponseEntity<Boolean> {
-        val usernameDisponible = userService.validarUsername(username)
-        if (!usernameDisponible)
-            return ResponseEntity.badRequest().build()
-        return ResponseEntity.ok(usernameDisponible)
-    }
-
-    @GetMapping("/check-email")
-    fun checkEmail(@RequestParam username: String): ResponseEntity<Boolean> {
-        val usernameDisponible = userService.validarMail(username)
-        if (!usernameDisponible)
-            return ResponseEntity.badRequest().build()
-        return ResponseEntity.ok(usernameDisponible)
-    }
-
-    @GetMapping
-    fun getAllUsers(): ResponseEntity<Any> {
-        val result = userService.retrieveAllUser()
-        return ResponseEntity.ok(result)
+    @GetMapping("/toolkit")
+    fun GetAllUsers() : ResponseEntity<List<Usuario>> {
+        return ResponseEntity.ok(userService.findAll())
     }
 
     /**
@@ -149,7 +170,6 @@ class UserController(var userService: UserService) {
     @DeleteMapping
     fun deleteUser(@RequestBody userBody: DeleteUserBody): ResponseEntity<Any> {
         val response = userService.delete(userBody.correo,userBody.password,userBody.token.removePrefix("Bearer "))
-
         if (response < 1){
             return ResponseEntity.badRequest().body("no se pudo eliminar ese usuario")
         } else {
@@ -201,7 +221,7 @@ class UserController(var userService: UserService) {
     }
 
     /**
-     * Función que regresa si dada una cadena, esta cumple con el patrón para ser un correo electrónico.
+     * Función auxiliar que regresa si dada una cadena, esta cumple con el patrón para ser un correo electrónico.
      * @param correo Cadena a probar que cumple el patrón de correo.
      */
     fun esCorreoValido(correo: String): Boolean {
@@ -325,11 +345,30 @@ class UserController(var userService: UserService) {
         }
     }
 
-    @GetMapping("/toolkit")
-    fun GetAllUsers() : ResponseEntity<List<Usuario>> {
-        return ResponseEntity.ok(userService.findAll())
-    }
-
+    /**
+     * Endpoint para modificar el rol de un usuario.
+     * @param userBody Datos del usuario a modificar.
+     * @return ResponseEntity con la información del usuario o un estado 401 si no es válido.
+     */
+    @Operation(
+        summary = "Modifica el rol de un usuario",
+        description = "Modifica el rol de un usuario",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Usuario no encontrado / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PutMapping("/toolkit")
     fun updateRole(@RequestBody userBody: UserBody): ResponseEntity<Usuario> {
         val response = userService.updateRol(userBody.username, userBody.rolid.toInt())
@@ -340,17 +379,100 @@ class UserController(var userService: UserService) {
         }
     }
 
+    /**
+     * Endpoint para verificar la igualdad de contraseñas de un usuario.
+     * @param userBody Datos del usuario que se recibirán en la petición.
+     * @return ResponseEntity con la respuesta del servicio.
+     */
+    @Operation(
+        summary = "Verifica a un usuario por su contraseña",
+        description = "Verifica a un usuario por su contraseña.",
+        security = [SecurityRequirement(name = "BearerAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Autenticado",
+                content = [Content(
+                    schema = Schema(implementation = Usuario::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Sin autorización / Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PostMapping("toolkit/verify-password")
     fun verifyPassword(@RequestHeader("Authorization") token : String, @RequestBody userBody: UserBody): ResponseEntity<UserBody>{
         val pass = userService.getPassword(token.removePrefix("Bearer "))
 
-        println(pass)
-        println(userBody.password)
-        println(pass.equals(userBody.password))
         if (pass.equals(userBody.password)){
             return ResponseEntity.ok(userBody)
         }
         return ResponseEntity.status(401).body(null)
     }
 
+    /**
+     * Endpoint para verificar la existencia de un username.
+     * @return ResponseEntity con `boolean` mostrando si se cumple con la existencia.
+     */
+    @Operation(
+        summary = "Verificación de existencia de username",
+        description = "Verifica si el username existe en el modelo",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    schema = Schema(implementation = Boolean::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
+    @GetMapping("/check-username")
+    fun checkUsername(@RequestParam username: String): ResponseEntity<Boolean> {
+        val usernameDisponible = userService.validarUsername(username)
+        if (!usernameDisponible)
+            return ResponseEntity.badRequest().build()
+        return ResponseEntity.ok(usernameDisponible)
+    }
+
+    /**
+     * Endpoint para verificar la existencia de un email.
+     * @return ResponseEntity con `boolean` mostrando si se cumple con la existencia.
+     */
+    @Operation(
+        summary = "Verificación de existencia de mail",
+        description = "Verifica si el mail existe en el modelo",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    schema = Schema(implementation = Boolean::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
+    @GetMapping("/check-email")
+    fun checkEmail(@RequestParam username: String): ResponseEntity<Boolean> {
+        val usernameDisponible = userService.validarMail(username)
+        if (!usernameDisponible)
+            return ResponseEntity.badRequest().build()
+        return ResponseEntity.ok(usernameDisponible)
+    }
 }

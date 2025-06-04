@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 /**
  * Clase que establece la configuración Cross-Origin Resource Sharing y su seguridad para nuestro sitio web.
  */
-
 @Configuration
 class CorsConfig {
 

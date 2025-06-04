@@ -9,15 +9,26 @@ import org.springframework.data.repository.CrudRepository
 /**
  * Interfaz donde las funciones buscan realizar operaciones CRUD al modelo relacionado con incidentes con query's buscando una response.
  */
-
 interface IncidentRepository: CrudRepository<Incident, Int> {
-
+    /**
+     * Función que obtiene todos los incidentes.
+     * @return Lista de incidentes.
+     */
     @Query(value = "SELECT * FROM incidente", nativeQuery = true)
     override fun findAll() : List<Incident>
-
+    /**
+     * Función que obtiene un incidente por su ID.
+     * @param id ID del incidente a buscar.
+     * @return Incidente con el ID buscado.
+     */
     @Query(value = "SELECT * FROM incidente WHERE incidenteid=?1", nativeQuery = true)
     fun findByIncidentId(id : Long) : Incident?
 
+    /**
+     * Función que elimina un incidente por su ID.
+     * @param id ID del incidente a eliminar.
+     * @return 1 si se eliminó correctamente, 0 si no se eliminó.
+     */
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM incidente WHERE incidenteid=?1", nativeQuery = true)

@@ -33,7 +33,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
                 hora = incidente.hora,
                 longitud = incidente.longitud,
                 latitud = incidente.latitud,
-                estado = incidente.estado
+                estado = "reportado"
             )
         val result = incidentRepository.save(incidentDB)
 
@@ -51,6 +51,10 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         )
     }
 
+    /**
+     * Función que obtiene todos los incidentes.
+     * @return Lista de incidentes.
+     */
     fun findAll(): List<Incidente> {
         val lista = incidentRepository.findAll()
         val respuesta : MutableList<Incidente> = mutableListOf()
@@ -63,6 +67,11 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
 
     }
 
+    /**
+     * Función que obtiene un incidente por su ID.
+     * @param id ID del incidente a buscar.
+     * @return Incidente vinculado al ID.
+     */
     fun findbyIncidentId(id : Long) : Incidente? {
         val response = incidentRepository.findByIncidentId(id)
         if (response != null) {
@@ -71,6 +80,12 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return null
     }
 
+    /**
+     * Función que actualiza el estado de un incidente.
+     * @param id ID del incidente a actualizar.
+     * @param status Nuevo estado del incidente.
+     * @return Incidente actualizado.
+     */
     fun updateStatus(id: Long, status: String) : Incidente? {
         val afectado = findbyIncidentId(id)
 
@@ -94,10 +109,20 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return null
     }
 
+    /**
+     * Función que elimina un incidente por su ID.
+     * @param id ID del incidente a eliminar.
+     * @return 1 si se eliminó, 0 si no se eliminó.
+     */
     fun deleteIncident(id : Long) : Int {
         return incidentRepository.deleteIncident(id)
     }
 
+    /**
+     * Función que convierte un incidente de la base de datos a un dominio.
+     * @param incident Incidente a convertir.
+     * @return Incidente convertido.
+     */
     fun castIncident(incident :Incident) : Incidente {
         return Incidente(
             incidenteid =  incident.incidenteid,

@@ -10,9 +10,9 @@ import jakarta.persistence.*
  * @property username Nombre de Usuario del mismo.
  * @property apPaterno Apellido paterno del usuario.
  * @property apMaterno Apellido materno del usuario.
+ * @property password Contraseña del usuario.
  * @property mail Correo electrónico del usuario.
  * @property token Tóken del usuario.
- * @property password Contraseña del usuario.
  */
 
 @Entity

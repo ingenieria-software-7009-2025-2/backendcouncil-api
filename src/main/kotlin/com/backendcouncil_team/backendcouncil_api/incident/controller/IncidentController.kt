@@ -10,9 +10,11 @@ import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
 import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -39,6 +41,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     @Operation(
         summary = "Registra un incidente",
         description = "Usando los datos brindados, registra un incidente.",
+        security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -81,27 +84,114 @@ class IncidentController(var incidentService: IncidentService,var userService: U
 
         } else return ResponseEntity.notFound().build()
     }
-    
+
+    /**
+     * Endpoint que regresa todos los incidentes.
+     * @return ResponseEntity con la respuesta del servicio y una lista de todos los incidentes si no han ocurrido
+     * errores.
+     */
+    @Operation(
+        summary = "Regresa todos los incidentes",
+        description = "Regresa una lista con todos los incidentes",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    array = ArraySchema(
+                        schema = Schema(implementation = Incidente::class)
+                    ),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+
+    )
     @GetMapping("/toolkit")
     fun getAll(): ResponseEntity<List<Incidente>>{
         return ResponseEntity.ok(incidentService.findAll())
     }
 
+    /**
+     * Endpoint para modificar la información de un incidente.
+     * @param token Token de autorización.
+     * @param updateBody Datos del incidente a modificar.
+     * @return ResponseEntity con la información del incidente actualizada o un estado 404 en caso de no encontrarse.
+     */
+    @Operation(
+        summary = "Modifica la información del incidente",
+        description = "Modifica datos de un incidente en específico",
+        security = [SecurityRequirement(name = "BearerAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Operación realizada con éxito",
+                content = [Content(
+                    schema = Schema(implementation = Incidente::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "No se encontró",
+                content = [Content()]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @PutMapping("/toolkit")
     fun updateStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Incidente> {
         val response =  incidentService.updateStatus(updateBody.incidenteid!!,updateBody.estatus)
-        println(updateBody.incidenteid!!)
-        println(updateBody.estatus)
         if (response != null) {
             return ResponseEntity.ok(response)
         }
         return ResponseEntity.notFound().build()
     }
 
+    /**
+     * Endpoint para borrar un incidente.
+     * @param token tóken de autorización.
+     * @param updateBody Datos del incidente.
+     * @return ResponseEntity con la información del incidente borrado al ser exitosa, o error si falla.
+     */
+    @Operation(
+        summary = "Borrar un incidente",
+        description = "Elimina un incidente del registro",
+        security = [SecurityRequirement(name = "BearerAuth")],
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Incidente borrado con éxito.",
+                content = [Content(
+                    schema = Schema(implementation = Incidente::class),
+                    mediaType = "aplication/json"
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Incidente no encontrado",
+                content = [Content()]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ocurrió un error inesperado",
+                content = [Content()]
+            ),
+        ]
+    )
     @DeleteMapping("/toolkit")
     fun deleteStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
         val response = incidentService.deleteIncident(updateBody.incidenteid!!)
-        if (response != null) {
+        if (response != 0) {
             return ResponseEntity.ok(response)
         }
         return ResponseEntity.notFound().build()
