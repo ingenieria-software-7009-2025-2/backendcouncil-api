@@ -16,10 +16,17 @@ CREATE TABLE Incidente (
     Hora TIME,
     Longitud NUMERIC(10,8),
     Latitud NUMERIC(10,8),
-    Estado ESTADO
+    Estado ESTADO,
+    Likes BIGINT
 );
 
-
+create table Comentario (
+	ComentarioID BIGINT,
+	ClienteID BIGINT,
+	IncidenteID BIGINT,
+	Contenido VARCHAR(200),
+	Likes BIGINT
+); 
 -- Tabla de las fotos relacionadas a los incidentes
 CREATE TABLE Foto (
     FotoID BYTEA,
@@ -68,6 +75,7 @@ ALTER TABLE Incidente ALTER COLUMN CategoriaID SET NOT NULL;
 ALTER TABLE Incidente ALTER COLUMN Longitud SET NOT NULL;
 ALTER TABLE Incidente ALTER COLUMN Latitud SET NOT NULL;
 
+
 -- RESTRICCIONES TABLA FOTO
 ALTER TABLE Foto ALTER COLUMN IncidenteID SET NOT NULL;
 ALTER TABLE Foto ALTER COLUMN FotoID SET NOT NULL;
@@ -99,7 +107,8 @@ ALTER TABLE Gestionar ALTER COLUMN ClienteID SET NOT NULL;
 -- LLAVES PRIMARIAS INCIDENTE
 ALTER TABLE Incidente ADD CONSTRAINT pk_incidente PRIMARY KEY (IncidenteID);
 
--- LLAVES PRIMARIAS TABLA FOTO
+-- LLAVES PRIMARIAS TABLA Comentarios
+AlTER table Comentario add constraint pk_comentarios primary key (ComentarioID);
 
 
 -- LLAVES PRIMARIAS ROL
@@ -122,6 +131,13 @@ ALTER TABLE Incidente ADD CONSTRAINT fk_incidente_cliente FOREIGN KEY (ClienteID
 -- LLAVES FORAENAS CLIENTE
 ALTER TABLE Cliente ADD CONSTRAINT fk_cliente_rol FOREIGN KEY (RolID) REFERENCES Rol(RolID)
     ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- LLAVES FORANEAS comentarios
+alter table Comentario add constraint fk_cliente_id foreign key (ClienteID) references Cliente(ClienteID)
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+alter table Comentario add constraint fk_INCIDENTE_id foreign key (IncidenteID) references Incidente(IncidenteID)
+    ON DELETE CASCADE ON UPDATE CASCADE;
 
 --LLAVES FORANEAS FOTO
 ALTER TABLE Foto ADD CONSTRAINT fk_foto_incidente FOREIGN KEY (IncidenteID) REFERENCES Incidente(IncidenteID)
