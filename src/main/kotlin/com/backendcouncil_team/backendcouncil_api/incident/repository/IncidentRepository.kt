@@ -44,5 +44,6 @@ interface IncidentRepository: CrudRepository<Incident, Int> {
     @Query(value = "UPDATE incidente SET likes = likes - 1 WHERE incidenteid = ?1 AND likes > 0", nativeQuery = true)
     fun stoleLike(incidentId : Long) : Int
 
-
+    @Query(value = "SELECT * FROM incidente where clienteid=?1", nativeQuery = true)
+    fun findByClienteId(clienteId : Long) : List<Incident>?
 }

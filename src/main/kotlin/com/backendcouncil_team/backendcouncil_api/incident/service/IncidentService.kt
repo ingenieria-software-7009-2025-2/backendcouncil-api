@@ -72,6 +72,17 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
     fun dislike(incidenteid: Long): Int{
         return incidentRepository.stoleLike(incidenteid)
     }
+
+    fun getUsr(cliente: Long):List<Incidente>{
+        val lista = incidentRepository.findByClienteId(cliente)
+        val respuesta : MutableList<Incidente> = mutableListOf()
+        lista?.forEach{ incident ->
+            respuesta.add(castIncident(incident))
+
+        }
+        return respuesta
+
+    }
     /**
      * Función que obtiene un incidente por su ID.
      * @param id ID del incidente a buscar.

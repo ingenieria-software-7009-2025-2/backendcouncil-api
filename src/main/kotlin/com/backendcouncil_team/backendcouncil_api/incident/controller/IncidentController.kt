@@ -1,6 +1,7 @@
 package com.backendcouncil_team.backendcouncil_api.incident.controller
 
 
+import com.backendcouncil_team.backendcouncil_api.incident.controller.body.GetBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.IncidentBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.UpdateBody
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
@@ -210,6 +211,16 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     fun deleteStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
         val response = incidentService.deleteIncident(updateBody.incidenteid!!)
         if (response != 0) {
+            return ResponseEntity.ok(response)
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+    @GetMapping("/user")
+    fun getAllincidentsUsr(@RequestBody getBody: GetBody): ResponseEntity<List<Incidente>>{
+        val response = incidentService.getUsr(getBody.clienteid)
+
+        if(response != null){
             return ResponseEntity.ok(response)
         }
         return ResponseEntity.notFound().build()
