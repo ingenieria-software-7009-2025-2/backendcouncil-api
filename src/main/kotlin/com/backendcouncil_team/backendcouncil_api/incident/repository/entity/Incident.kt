@@ -35,9 +35,9 @@ class Incident constructor(
     var fecha: String = "",
     @Column(name = "hora")
     var hora: String = "",
-    @Column(name = "longitud")
+    @Column(name = "longitud",precision = 30, scale = 10)
     var longitud: BigDecimal = 0.toBigDecimal(),
-    @Column(name = "latitud")
+    @Column(name = "latitud",precision = 30, scale = 10)
     var latitud: BigDecimal = 0.toBigDecimal(),
     @Column(name = "estado")
     var estado: String = "",

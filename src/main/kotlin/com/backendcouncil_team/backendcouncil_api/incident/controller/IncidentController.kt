@@ -60,7 +60,6 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
         val user = userService.getInfoAboutMe(token.removePrefix("Bearer "))
-
         val incident = Incidente(
             clienteid = user?.clienteid!!,
             nombre =  incidentBody.nombre!!,
