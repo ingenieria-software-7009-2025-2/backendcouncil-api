@@ -4,10 +4,7 @@ package com.backendcouncil_team.backendcouncil_api.incident.controller
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.IncidentBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.UpdateBody
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
-import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
-import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
-import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -59,6 +56,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         ]
 
     )
+
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
         val user = userService.getInfoAboutMe(token.removePrefix("Bearer "))
@@ -72,6 +70,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             latitud = incidentBody.latitud,
             longitud =  incidentBody.longitud,
             estado = "reportado",
+            likes = 0.toBigDecimal(),
             )
 
         if (user != null) {
@@ -85,6 +84,26 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         } else return ResponseEntity.notFound().build()
     }
 
+    @PutMapping("/like")
+    fun likeIncidente(@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
+        val result = incidentService.like(updateBody.incidenteid!!)
+
+        if(result != null) {
+            return ResponseEntity.ok(result)
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+
+    @PutMapping("/dislike")
+    fun dislikeIncidente(@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
+        val result = incidentService.dislike(updateBody.incidenteid!!)
+
+        if(result != null) {
+            return ResponseEntity.ok(result)
+        }
+        return ResponseEntity.notFound().build()
+    }
     /**
      * Endpoint que regresa todos los incidentes.
      * @return ResponseEntity con la respuesta del servicio y una lista de todos los incidentes si no han ocurrido

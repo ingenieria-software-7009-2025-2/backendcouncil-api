@@ -34,5 +34,15 @@ interface IncidentRepository: CrudRepository<Incident, Int> {
     @Query(value = "DELETE FROM incidente WHERE incidenteid=?1", nativeQuery = true)
     fun deleteIncident(id : Long) : Int
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE incidente SET likes = likes + 1 WHERE incidenteid = ?1", nativeQuery = true)
+    fun giveLike(incidentId : Long) : Int
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE incidente SET likes = likes - 1 WHERE incidenteid = ?1 AND likes > 0", nativeQuery = true)
+    fun stoleLike(incidentId : Long) : Int
+
 
 }

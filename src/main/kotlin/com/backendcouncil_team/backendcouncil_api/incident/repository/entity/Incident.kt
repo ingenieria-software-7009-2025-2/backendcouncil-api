@@ -41,4 +41,6 @@ class Incident constructor(
     var latitud: BigDecimal = 0.toBigDecimal(),
     @Column(name = "estado")
     var estado: String = "",
+    @Column(name = "likes")
+    var likes: BigDecimal =  0.toBigDecimal(),
 ){}

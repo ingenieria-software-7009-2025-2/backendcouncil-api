@@ -3,10 +3,7 @@ package com.backendcouncil_team.backendcouncil_api.incident.service
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.repository.IncidentRepository
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
-import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
-import org.apache.logging.log4j.util.Cast
 import org.springframework.stereotype.Service
-import java.time.Instant
 
 /**
  * Clase de servicio referente a incidentes.
@@ -47,7 +44,8 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             hora = result.hora,
             latitud =  result.latitud,
             longitud = result.longitud,
-            estado = result.estado
+            estado = result.estado,
+            likes = result.likes
         )
     }
 
@@ -67,6 +65,13 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
 
     }
 
+    fun like(incidenteid: Long): Int{
+        return incidentRepository.giveLike(incidenteid)
+    }
+
+    fun dislike(incidenteid: Long): Int{
+        return incidentRepository.stoleLike(incidenteid)
+    }
     /**
      * Función que obtiene un incidente por su ID.
      * @param id ID del incidente a buscar.
@@ -134,7 +139,8 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             hora = incident.hora,
             latitud =  incident.latitud,
             longitud = incident.longitud,
-            estado = incident.estado
+            estado = incident.estado,
+            likes = incident.likes
         )
     }
 
