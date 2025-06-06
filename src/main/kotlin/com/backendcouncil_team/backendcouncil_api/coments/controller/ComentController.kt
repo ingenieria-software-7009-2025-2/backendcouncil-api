@@ -24,13 +24,14 @@ class ComentController (var comentService: ComentService) {
 
     @PutMapping("/like")
     fun likeComent(@RequestBody coment: UpdateComBody): ResponseEntity<Int> {
-        val result = comentService.like(coment.comentid!!)
+        println(coment.comentarioid)
+        val result = comentService.like(coment.comentarioid!!)
         return ResponseEntity.ok(result)
     }
 
     @PutMapping("/dislike")
     fun dislikeComent(@RequestBody coment: UpdateComBody): ResponseEntity<Int> {
-        val result = comentService.dislike(coment.comentid!!)
+        val result = comentService.dislike(coment.comentarioid!!)
         return ResponseEntity.ok(result)
     }
 

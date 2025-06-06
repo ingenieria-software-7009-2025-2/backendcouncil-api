@@ -30,6 +30,7 @@ class ComentService (private val comentRepository: ComentRepository, repository:
     }
 
     fun like (coment: Long): Int{
+        println(coment)
         return comentRepository.giveLike(coment)
     }
     fun dislike (coment: Long): Int{
