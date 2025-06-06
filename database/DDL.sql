@@ -3,7 +3,7 @@ drop schema public cascade;
 create schema public;
 
 -- Estados de un incidente
-CREATE TYPE ESTADO AS ENUM('reportado','en revision','resuleto');
+CREATE TYPE ESTADO AS ENUM('reportado','revision','resuleto');
 
 -- Tabla para almacenar incidentes
 CREATE TABLE Incidente (
@@ -14,11 +14,12 @@ CREATE TABLE Incidente (
     Descripcion VARCHAR(80),
     Fecha DATE,
     Hora TIME,
-    Longitud NUMERIC(10,8),
-    Latitud NUMERIC(10,8),
+    Longitud NUMERIC(38,4),
+    Latitud NUMERIC(38,4),
     Estado ESTADO,
     Likes BIGINT
 );
+
 
 create table Comentario (
 	ComentarioID BIGINT,
