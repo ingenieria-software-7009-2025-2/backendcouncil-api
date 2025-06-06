@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "120accf4-3bee-4dff-815c-c8877371c79e",
-		"name": "3raIteracion",
-		"description": "# TEST para 3RA ITERACIÓN\n\nRecomendable correr con _delay de 1000ms_ entre tests c:\n\nRecomendable no dejar guardadas las variables.\n\nLos tests están diseñados para que la BD quede limpia después de la ejecución.\n\nSi se modifica `User` o `Incident`, se deben modificar las pruebas.\n\nEl alcance de las pruebas esta directamente relacionado con mi conocimiento de JavaScript :P.\n\n\\-- CCWebi",
+		"name": "4taIteracion",
+		"description": "# TEST para 4TA ITERACIÓN\n\nNOTA: Al finalizar el RUN hay q borrar manualmente los comenatarios.\n\nSi se gusta, es más fácil correr el DDL si la base no está poblada.\n\nRecomendable correr con _delay de 1000ms_ entre tests c:\n\nRecomendable no dejar guardadas las variables.\n\nLos tests están diseñados para que la BD quede limpia después de la ejecución.\n\nSi se modifica `User` o `Incident`, se deben modificar las pruebas.\n\nEl alcance de las pruebas esta directamente relacionado con mi conocimiento de JavaScript :P.\n\n\\-- CCWebi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "39319939"
 	},
@@ -39,8 +39,9 @@
 							"\r",
 							"// --- Variables de collection ---\r",
 							"pm.collectionVariables.set(\"correo\", json.correo);\r",
-							"pm.collectionVariables.set(\"username\", json.userName)\r",
-							"pm.collectionVariables.set(\"contraseña\", json.password);"
+							"pm.collectionVariables.set(\"username\", json.userName);\r",
+							"pm.collectionVariables.set(\"contraseña\", json.password);\r",
+							"pm.collectionVariables.set(\"clienteid\", json.clienteid);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -50,7 +51,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							""
+							"pm.collectionVariables.clear()"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -450,6 +451,9 @@
 							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
 							"    pm.response.to.not.be.error;\r",
 							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
 							"    pm.response.text().localeCompare(\"Sesión finalizada\");\r",
 							"});\r",
 							"\r",
@@ -528,7 +532,8 @@
 							"// --- Variables de collection ---\r",
 							"pm.collectionVariables.set(\"correo\", json.correo);\r",
 							"pm.collectionVariables.set(\"username\", json.userName)\r",
-							"pm.collectionVariables.set(\"contraseña\", json.password);"
+							"pm.collectionVariables.set(\"contraseña\", json.password);\r",
+							"pm.collectionVariables.set(\"clienteid\", json.clienteid);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -638,6 +643,58 @@
 			"response": []
 		},
 		{
+			"name": "PRUEBA_incident_user NONE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 404\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clienteid\": \"{{clienteid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident/comment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident",
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "PRUEBA_incident",
 			"event": [
 				{
@@ -664,6 +721,7 @@
 							"    pm.expect(json.latitud).to.eql(19.566688);\r",
 							"    pm.expect(json.longitud).to.eql(99.138437);\r",
 							"    pm.expect(json.estado).to.eql(\"reportado\");\r",
+							"    pm.expect(json.likes).to.eql(0);\r",
 							"});\r",
 							"\r",
 							"// --- Variables de collection ---\r",
@@ -712,6 +770,413 @@
 			"response": []
 		},
 		{
+			"name": "PRUEBA_incident_like",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.response.text().localeCompare(\"1\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idincidente\": \"{{incidenteid}}\",\r\n    \"estatus\": \"reportado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_dislike",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.response.text().localeCompare(\"0\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idincidente\": \"{{incidenteid}}\",\r\n    \"estatus\": \"reportado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/incident/dislike",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"incident",
+						"dislike"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.comentarioid).to.not.eql(null);\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.incidente).to.not.eql(null);\r",
+							"    pm.expect(json.contenido).to.eql(\"Este es un poderosisimo comentario. Patrocinado por ECdB.\");\r",
+							"    pm.expect(json.likes).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"// --- Variables de collection ---\r",
+							"pm.collectionVariables.set(\"commentid\", json.comentarioid);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clienteid\": \"{{clienteid}}\",\r\n    \"incidenteid\": \"{{incidenteid}}\",\r\n    \"contenido\": \"Este es un poderosisimo comentario. Patrocinado por ECdB.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/comment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_comment_like",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.response.text().localeCompare(\"1\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comentid\": \"{{commentid}}\",\r\n    \"estatus\": \"reportado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/comment/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"comment",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_comment_dislike",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.response.text().localeCompare(\"0\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comentid\": \"{{commentid}}\",\r\n    \"estatus\": \"reportado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/comment/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"comment",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_comment_2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
+							"    pm.expect(json.comentarioid).to.not.eql(null);\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.incidente).to.not.eql(null);\r",
+							"    pm.expect(json.contenido).to.eql(\"Este es otro comentario patrocinado por Team Cherry, para promocionar SILSON.\");\r",
+							"    pm.expect(json.likes).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clienteid\": \"{{clienteid}}\",\r\n    \"incidenteid\": \"{{incidenteid}}\",\r\n    \"contenido\": \"Este es otro comentario patrocinado por Team Cherry, para promocionar SILSON.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/comment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRUEBA_incident_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Integridad de llaves\", function () {\r",
+							"    require('lodash').each((json.data), (incidente)=>{\r",
+							"        pm.expect(incidente.to.have.property(\"incidenteid\"));\r",
+							"        pm.expect(incidente.to.be(pm.collectionVariables.get(\"clienteid\")));\r",
+							"        pm.expect(incidente.to.have.property(\"categoriaid\"));\r",
+							"        pm.expect(incidente.to.have.property(\"nombre\"));\r",
+							"        pm.expect(incidente.to.have.property(\"descripcion\"));\r",
+							"        pm.expect(incidente.to.have.property(\"fecha\"));\r",
+							"        pm.expect(incidente.to.have.property(\"hora\"));\r",
+							"        pm.expect(incidente.to.have.property(\"latitud\"));\r",
+							"        pm.expect(incidente.to.have.property(\"longitud\"));\r",
+							"        pm.expect(incidente.to.have.property(\"estado\"));\r",
+							"        pm.expect(incidente.to.have.property(\"likes\"));\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clienteid\": \"{{clienteid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/jncident/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"jncident",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "PRUEBA_incident_status",
 			"event": [
 				{
@@ -738,6 +1203,7 @@
 							"    pm.expect(json.latitud).to.eql(19.57);\r",
 							"    pm.expect(json.longitud).to.eql(99.14);\r",
 							"    pm.expect(json.estado).to.eql(\"en revision\");\r",
+							"    pm.expect(incidente.to.have.property(\"likes\"));\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -784,6 +1250,68 @@
 			"response": []
 		},
 		{
+			"name": "PRUEBA_getAll_comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// JSON de respuesta\r",
+							"var json = pm.response.json();\r",
+							"\r",
+							"// --- TESTS ---\r",
+							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"TEST: Integridad de llaves\", function () {\r",
+							"    require('lodash').each((json.data), (comment)=>{\r",
+							"        pm.expect(comment.to.have.property(\"comentarioid\"));\r",
+							"        pm.expect(comment.to.have.property(\"clienteid\"));\r",
+							"        pm.expect(comment.to.have.property(\"incidente\"));\r",
+							"        pm.expect(comment.to.have.property(\"contenido\"));\r",
+							"        pm.expect(comment.to.have.property(\"likes\"));\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/comment/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"comment",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "PRUEBA_getAll_incidents",
 			"event": [
 				{
@@ -811,6 +1339,7 @@
 							"        pm.expect(incidente.to.have.property(\"latitud\"));\r",
 							"        pm.expect(incidente.to.have.property(\"longitud\"));\r",
 							"        pm.expect(incidente.to.have.property(\"estado\"));\r",
+							"        pm.expect(incidente.to.have.property(\"likes\"));\r",
 							"    });\r",
 							"});"
 						],
@@ -1575,7 +2104,15 @@
 			"value": ""
 		},
 		{
-			"key": "incidentid",
+			"key": "clienteid",
+			"value": ""
+		},
+		{
+			"key": "correoTEMP",
+			"value": ""
+		},
+		{
+			"key": "contraseñaTEMP",
 			"value": ""
 		},
 		{
@@ -1588,6 +2125,10 @@
 		},
 		{
 			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "incidenteid",
 			"value": ""
 		}
 	]
