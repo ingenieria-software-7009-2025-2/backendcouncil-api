@@ -20,4 +20,5 @@ data class IncidentBody (
     var hora:  String,
     var latitud:  BigDecimal,
     var longitud:  BigDecimal,
+    var categoriaid:  Long,
 ){}

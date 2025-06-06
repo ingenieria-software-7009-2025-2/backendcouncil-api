@@ -25,7 +25,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             Incident(
                 incidenteid = System.currentTimeMillis(),
                 clienteid =  cliente,
-                categoriaid = incidente.categoriaid,
+                categoriaid = incidente.categoriaid!!,
                 nombre = incidente.nombre,
                 descripcion =  incidente.descripcion,
                 fecha = incidente.fecha,
@@ -112,7 +112,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             val newIncident = Incident(
                 incidenteid = id,
                 clienteid = afectado.clienteid,
-                categoriaid = afectado.categoriaid,
+                categoriaid = afectado.categoriaid!!,
                 nombre = afectado.nombre,
                 descripcion = afectado.descripcion,
                 fecha = afectado.fecha,

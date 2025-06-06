@@ -72,6 +72,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             latitud = incidentBody.latitud,
             longitud =  incidentBody.longitud,
             estado = Estado.reportado,
+            categoriaid = incidentBody.categoriaid,
             likes = 0.toBigDecimal(),
             )
 
