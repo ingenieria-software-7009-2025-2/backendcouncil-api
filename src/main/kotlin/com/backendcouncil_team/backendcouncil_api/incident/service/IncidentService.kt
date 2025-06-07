@@ -20,6 +20,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
      * @return El incidente que se ha creado.
      */
     fun addIncident(cliente: Long ,incidente: Incidente): Incidente {
+        println(incidente)
         val incidentDB =
             Incident(
                 incidenteid = System.currentTimeMillis(),

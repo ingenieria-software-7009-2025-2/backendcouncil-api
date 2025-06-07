@@ -218,7 +218,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         return ResponseEntity.notFound().build()
     }
 
-    @GetMapping("/user")
+    @PostMapping("/user")
     fun getAllincidentsUsr(@RequestBody getBody: GetBody): ResponseEntity<List<Incidente>>{
         val response = incidentService.getUsr(getBody.clienteid)
 
