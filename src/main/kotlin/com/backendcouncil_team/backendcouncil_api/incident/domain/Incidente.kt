@@ -24,6 +24,6 @@ data class Incidente (
     var hora:  String,
     var latitud: BigDecimal,
     var longitud: BigDecimal,
-    var estado: String,
+    var estado: Estado,
     var likes: BigDecimal
 ){}

@@ -1,5 +1,6 @@
 package com.backendcouncil_team.backendcouncil_api.incident.service
 
+import com.backendcouncil_team.backendcouncil_api.incident.domain.Estado
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.repository.IncidentRepository
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
@@ -30,7 +31,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
                 hora = incidente.hora,
                 longitud = incidente.longitud,
                 latitud = incidente.latitud,
-                estado = "reportado"
+                estado = Estado.reportado
             )
         val result = incidentRepository.save(incidentDB)
 
@@ -44,7 +45,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             hora = result.hora,
             latitud =  result.latitud,
             longitud = result.longitud,
-            estado = result.estado,
+            estado = result.estado!!,
             likes = result.likes
         )
     }
@@ -106,7 +107,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         val afectado = findbyIncidentId(id)
 
         if (afectado != null) {
-            afectado.estado = status
+            afectado.estado = castEnum(status)
             val newIncident = Incident(
                 incidenteid = id,
                 clienteid = afectado.clienteid,
@@ -117,7 +118,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
                 hora = afectado.hora,
                 longitud = afectado.longitud,
                 latitud = afectado.latitud,
-                estado = afectado.estado
+                estado = afectado.estado,
             )
             incidentRepository.save(newIncident)
             return afectado
@@ -125,6 +126,16 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return null
     }
 
+    fun castEnum(estado: String): Estado {
+        if (estado.equals("reportado", true)) {
+            return Estado.reportado
+        } else if (estado.equals("revision", true)) {
+            return Estado.revision
+        } else if (estado.equals("resuelto", true)) {
+            return Estado.resuelto
+        }
+        return Estado.reportado
+    }
     /**
      * Función que elimina un incidente por su ID.
      * @param id ID del incidente a eliminar.
@@ -140,6 +151,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
      * @return Incidente convertido.
      */
     fun castIncident(incident :Incident) : Incidente {
+        println(incident.toString())
         return Incidente(
             incidenteid =  incident.incidenteid,
             clienteid = incident.clienteid,
@@ -150,7 +162,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             hora = incident.hora,
             latitud =  incident.latitud,
             longitud = incident.longitud,
-            estado = incident.estado,
+            estado = incident.estado!!,
             likes = incident.likes
         )
     }

@@ -1,5 +1,6 @@
 package com.backendcouncil_team.backendcouncil_api.incident.repository.entity
 
+import com.backendcouncil_team.backendcouncil_api.incident.domain.Estado
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -39,8 +40,10 @@ class Incident constructor(
     var longitud: BigDecimal = 0.toBigDecimal(),
     @Column(name = "latitud",precision = 30, scale = 10)
     var latitud: BigDecimal = 0.toBigDecimal(),
-    @Column(name = "estado")
-    var estado: String = "",
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    //@Column(name = "estado")
+    var estado: Estado? = null,
     @Column(name = "likes")
     var likes: BigDecimal =  0.toBigDecimal(),
 ){}

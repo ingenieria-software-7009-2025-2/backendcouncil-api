@@ -4,6 +4,7 @@ package com.backendcouncil_team.backendcouncil_api.incident.controller
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.GetBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.IncidentBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.UpdateBody
+import com.backendcouncil_team.backendcouncil_api.incident.domain.Estado
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
@@ -60,6 +61,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
 
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
+        println(incidentBody.toString())
         val user = userService.getInfoAboutMe(token.removePrefix("Bearer "))
         val incident = Incidente(
             clienteid = user?.clienteid!!,
@@ -69,7 +71,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             hora =  incidentBody.hora,
             latitud = incidentBody.latitud,
             longitud =  incidentBody.longitud,
-            estado = "reportado",
+            estado = Estado.reportado,
             likes = 0.toBigDecimal(),
             )
 
