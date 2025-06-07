@@ -1,12 +1,10 @@
 package com.backendcouncil_team.backendcouncil_api.incident.service
 
+import com.backendcouncil_team.backendcouncil_api.incident.domain.Estado
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
 import com.backendcouncil_team.backendcouncil_api.incident.repository.IncidentRepository
 import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
-import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
-import org.apache.logging.log4j.util.Cast
 import org.springframework.stereotype.Service
-import java.time.Instant
 
 /**
  * Clase de servicio referente a incidentes.
@@ -22,18 +20,19 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
      * @return El incidente que se ha creado.
      */
     fun addIncident(cliente: Long ,incidente: Incidente): Incidente {
+        println(incidente)
         val incidentDB =
             Incident(
                 incidenteid = System.currentTimeMillis(),
                 clienteid =  cliente,
-                categoriaid = incidente.categoriaid,
+                categoriaid = incidente.categoriaid!!,
                 nombre = incidente.nombre,
                 descripcion =  incidente.descripcion,
                 fecha = incidente.fecha,
                 hora = incidente.hora,
                 longitud = incidente.longitud,
                 latitud = incidente.latitud,
-                estado = "reportado"
+                estado = Estado.reportado.toString()
             )
         val result = incidentRepository.save(incidentDB)
 
@@ -47,7 +46,8 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             hora = result.hora,
             latitud =  result.latitud,
             longitud = result.longitud,
-            estado = result.estado
+            estado = result.estado!!,
+            likes = result.likes
         )
     }
 
@@ -67,6 +67,24 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
 
     }
 
+    fun like(incidenteid: Long): Int{
+        return incidentRepository.giveLike(incidenteid)
+    }
+
+    fun dislike(incidenteid: Long): Int{
+        return incidentRepository.stoleLike(incidenteid)
+    }
+
+    fun getUsr(cliente: Long):List<Incidente>{
+        val lista = incidentRepository.findByClienteId(cliente)
+        val respuesta : MutableList<Incidente> = mutableListOf()
+        lista?.forEach{ incident ->
+            respuesta.add(castIncident(incident))
+
+        }
+        return respuesta
+
+    }
     /**
      * Función que obtiene un incidente por su ID.
      * @param id ID del incidente a buscar.
@@ -90,18 +108,18 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         val afectado = findbyIncidentId(id)
 
         if (afectado != null) {
-            afectado.estado = status
+            afectado.estado = castEnum(status).toString()
             val newIncident = Incident(
                 incidenteid = id,
                 clienteid = afectado.clienteid,
-                categoriaid = afectado.categoriaid,
+                categoriaid = afectado.categoriaid!!,
                 nombre = afectado.nombre,
                 descripcion = afectado.descripcion,
                 fecha = afectado.fecha,
                 hora = afectado.hora,
                 longitud = afectado.longitud,
                 latitud = afectado.latitud,
-                estado = afectado.estado
+                estado = afectado.estado,
             )
             incidentRepository.save(newIncident)
             return afectado
@@ -109,6 +127,16 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return null
     }
 
+    fun castEnum(estado: String): Estado {
+        if (estado.equals("reportado", true)) {
+            return Estado.reportado
+        } else if (estado.equals(" en revision", true)) {
+            return Estado.revision
+        } else if (estado.equals("resuelto", true)) {
+            return Estado.resuelto
+        }
+        return Estado.reportado
+    }
     /**
      * Función que elimina un incidente por su ID.
      * @param id ID del incidente a eliminar.
@@ -124,6 +152,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
      * @return Incidente convertido.
      */
     fun castIncident(incident :Incident) : Incidente {
+        println(incident.toString())
         return Incidente(
             incidenteid =  incident.incidenteid,
             clienteid = incident.clienteid,
@@ -134,7 +163,8 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
             hora = incident.hora,
             latitud =  incident.latitud,
             longitud = incident.longitud,
-            estado = incident.estado
+            estado = incident.estado!!,
+            likes = incident.likes
         )
     }
 

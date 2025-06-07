@@ -1,13 +1,12 @@
 package com.backendcouncil_team.backendcouncil_api.incident.controller
 
 
+import com.backendcouncil_team.backendcouncil_api.incident.controller.body.GetBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.IncidentBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.UpdateBody
+import com.backendcouncil_team.backendcouncil_api.incident.domain.Estado
 import com.backendcouncil_team.backendcouncil_api.incident.domain.Incidente
-import com.backendcouncil_team.backendcouncil_api.incident.repository.entity.Incident
 import com.backendcouncil_team.backendcouncil_api.incident.service.IncidentService
-import com.backendcouncil_team.backendcouncil_api.user.domain.Usuario
-import com.backendcouncil_team.backendcouncil_api.user.controller.body.UserBody
 import com.backendcouncil_team.backendcouncil_api.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -59,10 +58,11 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         ]
 
     )
+
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
+        println(incidentBody.toString())
         val user = userService.getInfoAboutMe(token.removePrefix("Bearer "))
-
         val incident = Incidente(
             clienteid = user?.clienteid!!,
             nombre =  incidentBody.nombre!!,
@@ -71,7 +71,9 @@ class IncidentController(var incidentService: IncidentService,var userService: U
             hora =  incidentBody.hora,
             latitud = incidentBody.latitud,
             longitud =  incidentBody.longitud,
-            estado = "reportado",
+            estado = Estado.reportado.toString(),
+            categoriaid = incidentBody.categoriaid,
+            likes = 0.toBigDecimal(),
             )
 
         if (user != null) {
@@ -85,6 +87,26 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         } else return ResponseEntity.notFound().build()
     }
 
+    @PutMapping("/like")
+    fun likeIncidente(@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
+        val result = incidentService.like(updateBody.incidenteid!!)
+
+        if(result != null) {
+            return ResponseEntity.ok(result)
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+
+    @PutMapping("/dislike")
+    fun dislikeIncidente(@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
+        val result = incidentService.dislike(updateBody.incidenteid!!)
+
+        if(result != null) {
+            return ResponseEntity.ok(result)
+        }
+        return ResponseEntity.notFound().build()
+    }
     /**
      * Endpoint que regresa todos los incidentes.
      * @return ResponseEntity con la respuesta del servicio y una lista de todos los incidentes si no han ocurrido
@@ -192,6 +214,16 @@ class IncidentController(var incidentService: IncidentService,var userService: U
     fun deleteStatus(@RequestHeader("Authorization") token: String,@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
         val response = incidentService.deleteIncident(updateBody.incidenteid!!)
         if (response != 0) {
+            return ResponseEntity.ok(response)
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+    @PostMapping("/user")
+    fun getAllincidentsUsr(@RequestBody getBody: GetBody): ResponseEntity<List<Incidente>>{
+        val response = incidentService.getUsr(getBody.clienteid)
+
+        if(response != null){
             return ResponseEntity.ok(response)
         }
         return ResponseEntity.notFound().build()

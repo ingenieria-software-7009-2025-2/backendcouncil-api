@@ -1,6 +1,5 @@
 package com.backendcouncil_team.backendcouncil_api.incident.controller.body
 
-import ch.qos.logback.core.subst.Token
 import java.math.BigDecimal
 
 /**
@@ -21,4 +20,5 @@ data class IncidentBody (
     var hora:  String,
     var latitud:  BigDecimal,
     var longitud:  BigDecimal,
+    var categoriaid:  Long,
 ){}
