@@ -3,7 +3,7 @@ drop schema public cascade;
 create schema public;
 
 -- Estados de un incidente
-CREATE TYPE ESTADO AS ENUM('reportado','revision','resuleto');
+CREATE TYPE ESTADO AS ENUM('reportado','en revision','resuleto');
 
 -- Tabla para almacenar incidentes
 CREATE TABLE Incidente (
