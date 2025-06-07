@@ -1,6 +1,7 @@
 package com.backendcouncil_team.backendcouncil_api.coments.service;
 
 import ch.qos.logback.core.net.server.Client
+import com.backendcouncil_team.backendcouncil_api.coments.controller.body.UpdateComBody
 import com.backendcouncil_team.backendcouncil_api.coments.domain.Comentario
 import com.backendcouncil_team.backendcouncil_api.coments.repository.ComentRepository
 import com.backendcouncil_team.backendcouncil_api.coments.repository.entity.Coment
@@ -48,6 +49,16 @@ class ComentService (private val comentRepository: ComentRepository, repository:
         return respuesta
     }
 
+    fun getusr(coment: Long): List<Comentario> {
+        val lista  = comentRepository.findAllByIncidentId(coment)
+        val respuesta: MutableList<Comentario> = mutableListOf()
+
+        lista.forEach {
+            coment ->
+            respuesta.add(castComent(coment))
+        }
+        return respuesta
+    }
     fun castComent(coment: Coment): Comentario {
         return Comentario(
             comentarioid = coment.comentarioid,

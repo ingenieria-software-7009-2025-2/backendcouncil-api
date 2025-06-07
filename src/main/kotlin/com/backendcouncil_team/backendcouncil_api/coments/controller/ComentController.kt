@@ -39,4 +39,14 @@ class ComentController (var comentService: ComentService) {
     fun getAllComents(): ResponseEntity<List<Comentario>> {
         return ResponseEntity.ok(comentService.findAll())
     }
+
+    @PostMapping("/incident")
+    fun getcommentsId(@RequestBody coment: UpdateComBody): ResponseEntity<List<Comentario>> {
+        val result = comentService.getusr(coment.incidenteid!!)
+
+        if (result != null) {
+            return ResponseEntity.ok(result)
+        }
+        return ResponseEntity.notFound().build()
+    }
 }
