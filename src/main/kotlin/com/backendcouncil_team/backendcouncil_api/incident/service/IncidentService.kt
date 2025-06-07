@@ -32,7 +32,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
                 hora = incidente.hora,
                 longitud = incidente.longitud,
                 latitud = incidente.latitud,
-                estado = Estado.reportado
+                estado = Estado.reportado.toString()
             )
         val result = incidentRepository.save(incidentDB)
 
@@ -108,7 +108,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         val afectado = findbyIncidentId(id)
 
         if (afectado != null) {
-            afectado.estado = castEnum(status)
+            afectado.estado = castEnum(status).toString()
             val newIncident = Incident(
                 incidenteid = id,
                 clienteid = afectado.clienteid,
@@ -130,7 +130,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
     fun castEnum(estado: String): Estado {
         if (estado.equals("reportado", true)) {
             return Estado.reportado
-        } else if (estado.equals("revision", true)) {
+        } else if (estado.equals(" en revision", true)) {
             return Estado.revision
         } else if (estado.equals("resuelto", true)) {
             return Estado.resuelto

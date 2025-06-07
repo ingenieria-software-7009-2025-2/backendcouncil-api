@@ -40,10 +40,10 @@ class Incident constructor(
     var longitud: BigDecimal = 0.toBigDecimal(),
     @Column(name = "latitud",precision = 30, scale = 10)
     var latitud: BigDecimal = 0.toBigDecimal(),
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(nullable = false)
     //@Column(name = "estado")
-    var estado: Estado? = null,
+    var estado: String?= null,
     @Column(name = "likes")
     var likes: BigDecimal =  0.toBigDecimal(),
 ){}
