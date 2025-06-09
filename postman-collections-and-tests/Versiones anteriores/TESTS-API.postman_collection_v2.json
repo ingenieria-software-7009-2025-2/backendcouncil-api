@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "120accf4-3bee-4dff-815c-c8877371c79e",
 		"name": "4taIteracion",
-		"description": "# TEST para 4TA ITERACIÓN\n\nNOTA: Al finalizar el RUN hay q borrar manualmente los comenatarios.\n\nIntentar si se borra la estructura de la DB, apagar el motor de la API y hacer lo cambios.\n\nSi se gusta, es más fácil correr el DDL si la base no está poblada.\n\nRecomendable correr con _delay de 1000ms_ entre tests c:\n\nRecomendable no dejar guardadas las variables.\n\nLos tests están diseñados para que la BD quede limpia después de la ejecución.\n\nSi se modifica `User` o `Incident`, se deben modificar las pruebas.\n\nEl alcance de las pruebas esta directamente relacionado con mi conocimiento de JavaScript :P.\n\n\\-- CCWebi",
+		"description": "# TEST para 4TA ITERACIÓN\n\nNOTA: Al finalizar el RUN hay q borrar manualmente los comenatarios.\n\nSi se gusta, es más fácil correr el DDL si la base no está poblada.\n\nRecomendable correr con _delay de 1000ms_ entre tests c:\n\nRecomendable no dejar guardadas las variables.\n\nLos tests están diseñados para que la BD quede limpia después de la ejecución.\n\nSi se modifica `User` o `Incident`, se deben modificar las pruebas.\n\nEl alcance de las pruebas esta directamente relacionado con mi conocimiento de JavaScript :P.\n\n\\-- CCWebi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "39319939"
 	},
@@ -41,10 +41,7 @@
 							"pm.collectionVariables.set(\"correo\", json.correo);\r",
 							"pm.collectionVariables.set(\"username\", json.userName);\r",
 							"pm.collectionVariables.set(\"contraseña\", json.password);\r",
-							"pm.collectionVariables.set(\"clienteid\", json.clienteid);\r",
-							"pm.collectionVariables.set(\"nombre\", json.nombre);\r",
-							"pm.collectionVariables.set(\"paterno\", json.apPaterno);\r",
-							"pm.collectionVariables.set(\"materno\", json.apMaterno);"
+							"pm.collectionVariables.set(\"clienteid\", json.clienteid);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -54,7 +51,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.collectionVariables.clear();"
+							"pm.collectionVariables.clear()"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -110,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"diff\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"{{correo}}\"\r\n}",
+					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"diff\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"silson@hollowmail.edu\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -154,7 +151,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"{{username}}\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"ada_lovelace@math.uk\"\r\n}",
+					"raw": "{\r\n  \"nombre\": \"Webi\",\r\n  \"username\": \"silson\",\r\n  \"apPaterno\": \"Torres\",\r\n  \"apMaterno\": \"Santos\",\r\n  \"password\": \"s1lKz0_nG\",\r\n  \"correo\": \"ada_lovelace@math.uk\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -193,15 +190,15 @@
 							"});\r",
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
 							"    pm.expect(json.rolid).to.eql(2);\r",
-							"    pm.expect(json.userName).to.eql(pm.collectionVariables.get(\"username\"));\r",
-							"    pm.expect(json.nombre).to.eql(pm.collectionVariables.get(\"nombre\"));\r",
-							"    pm.expect(json.apPaterno).to.eql(pm.collectionVariables.get(\"paterno\"));\r",
-							"    pm.expect(json.apMaterno).to.eql(pm.collectionVariables.get(\"materno\"));\r",
-							"    pm.expect(json.correo).to.eql(pm.collectionVariables.get(\"correo\"));\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
 							"    pm.expect(json.token).to.not.eql(null);\r",
-							"    pm.expect(json.password).to.eql(pm.collectionVariables.get(\"contraseña\"));\r",
+							"    pm.expect(json.password).to.eql(\"s1lKz0_nG\");\r",
 							"    pm.expect(json.isActive).to.eql(false);\r",
 							"});\r",
 							"\r",
@@ -258,15 +255,15 @@
 							"});\r",
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
 							"    pm.expect(json.rolid).to.eql(2);\r",
-							"    pm.expect(json.userName).to.eql(pm.collectionVariables.get(\"username\"));\r",
-							"    pm.expect(json.nombre).to.eql(pm.collectionVariables.get(\"nombre\"));\r",
-							"    pm.expect(json.apPaterno).to.eql(pm.collectionVariables.get(\"paterno\"));\r",
-							"    pm.expect(json.apMaterno).to.eql(pm.collectionVariables.get(\"materno\"));\r",
-							"    pm.expect(json.correo).to.eql(pm.collectionVariables.get(\"correo\"));\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
 							"    pm.expect(json.token).to.eql(\"*******\");\r",
-							"    pm.expect(json.password).to.eql(pm.collectionVariables.get(\"contraseña\"));\r",
+							"    pm.expect(json.password).to.eql(\"s1lKz0_nG\");\r",
 							"    pm.expect(json.isActive).to.eql(false);\r",
 							"});"
 						],
@@ -321,15 +318,17 @@
 							"});\r",
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
 							"    pm.expect(json.rolid).to.eql(4);\r",
-							"    pm.expect(json.userName).to.eql(pm.collectionVariables.get(\"username\"));\r",
-							"    pm.expect(json.nombre).to.eql(pm.collectionVariables.get(\"nombre\"));\r",
-							"    pm.expect(json.apPaterno).to.eql(pm.collectionVariables.get(\"paterno\"));\r",
-							"    pm.expect(json.apMaterno).to.eql(pm.collectionVariables.get(\"materno\"));\r",
-							"    pm.expect(json.correo).to.eql(pm.collectionVariables.get(\"correo\"));\r",
-							"    pm.expect(json.token).to.eql(pm.collectionVariables.get(\"token\"));\r",
-							"    pm.expect(json.password).to.eql(\"*******\");\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
+							"    pm.expect(json.nombre).to.eql(\"Webi\");\r",
+							"    pm.expect(json.apPaterno).to.eql(\"Torres\");\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.not.eql(\"*******\");\r",
+							"    pm.expect(json.token).to.not.eql(null);\r",
+							"    pm.expect(json.password).to.not.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(null);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -382,15 +381,17 @@
 							"});\r",
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
 							"    pm.expect(json.rolid).to.eql(4);\r",
-							"    pm.expect(json.userName).to.eql(pm.collectionVariables.get(\"username\"));\r",
+							"    pm.expect(json.userName).to.eql(\"silson\");\r",
 							"    pm.expect(json.nombre).to.eql(\"Comas\");\r",
 							"    pm.expect(json.apPaterno).to.eql(\"Labonne\");\r",
-							"    pm.expect(json.apMaterno).to.eql(pm.collectionVariables.get(\"materno\"));\r",
-							"    pm.expect(json.correo).to.eql(pm.collectionVariables.get(\"correo\"));\r",
-							"    pm.expect(json.token).to.eql(pm.collectionVariables.get(\"token\"));\r",
-							"    pm.expect(json.password).to.not.eql(pm.collectionVariables.get(\"password\"));\r",
+							"    pm.expect(json.apMaterno).to.eql(\"Santos\");\r",
+							"    pm.expect(json.correo).to.eql(\"silson@hollowmail.edu\");\r",
+							"    pm.expect(json.token).to.not.eql(\"*******\");\r",
+							"    pm.expect(json.token).to.not.eql(null);\r",
+							"    pm.expect(json.password).to.not.eql(\"s1lKz0_nG\");\r",
+							"    pm.expect(json.isActive).to.eql(false);\r",
 							"});\r",
 							"\r",
 							"pm.collectionVariables.set(\"username\", json.userName);\r",
@@ -457,11 +458,12 @@
 							"});\r",
 							"\r",
 							"// --- Variables de collection ---\r",
-							"pm.collectionVariables.unset(\"token\");\r",
-							"\r",
 							"// Temporales\r",
-							"pm.collectionVariables.set(\"correouser1\",pm.collectionVariables.get(\"correo\"));\r",
-							"pm.collectionVariables.set(\"passworduser1\",pm.collectionVariables.get(\"contraseña\"));"
+							"pm.collectionVariables.set(\"correoTEMP\", pm.collectionVariables.get(\"correo\"));\r",
+							"pm.collectionVariables.set(\"contraseñaTEMP\", pm.collectionVariables.get(\"contraseña\"))\r",
+							"pm.collectionVariables.unset(\"token\");\r",
+							"pm.collectionVariables.unset(\"correo\");\r",
+							"pm.collectionVariables.unset(\"contraseña\");"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -528,14 +530,10 @@
 							"\r",
 							"\r",
 							"// --- Variables de collection ---\r",
-							"\r",
 							"pm.collectionVariables.set(\"correo\", json.correo);\r",
-							"pm.collectionVariables.set(\"username\", json.userName);\r",
+							"pm.collectionVariables.set(\"username\", json.userName)\r",
 							"pm.collectionVariables.set(\"contraseña\", json.password);\r",
-							"pm.collectionVariables.set(\"clienteid\", json.clienteid);\r",
-							"pm.collectionVariables.set(\"nombre\", json.nombre);\r",
-							"pm.collectionVariables.set(\"paterno\", json.apPaterno);\r",
-							"pm.collectionVariables.set(\"materno\", json.apMaterno);"
+							"pm.collectionVariables.set(\"clienteid\", json.clienteid);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -655,9 +653,9 @@
 							"var json = pm.response.json();\r",
 							"\r",
 							"// --- TESTS ---\r",
-							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
-							"    pm.response.to.not.be.error;\r",
-							"    pm.response.to.have.status(200);\r",
+							"pm.test(\"TEST: Código de estado: 404\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.status(404);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -665,8 +663,11 @@
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -711,8 +712,8 @@
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
 							"    pm.expect(json.incidenteid).to.not.eql(null);\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
-							"    // pm.expect(json.categoriaid).to.eql(246832);\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.categoriaid).to.eql(246832);\r",
 							"    pm.expect(json.nombre).to.eql(\"Bache\");\r",
 							"    pm.expect(json.descripcion).to.eql(\"Bache C. Silson, Esq. Jolounai\");\r",
 							"    pm.expect(json.fecha).to.eql(\"2025-02-12\");\r",
@@ -799,7 +800,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -853,7 +854,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -877,59 +878,6 @@
 			"response": []
 		},
 		{
-			"name": "PRUEBA_comment_incident NONE",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// JSON de respuesta\r",
-							"var json = pm.response.json();\r",
-							"\r",
-							"// --- TESTS ---\r",
-							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
-							"    pm.response.to.not.be.error;\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
-							"    pm.response.text().localeCompare(\"[]\");\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"comentarioid\": \"0\",\r\n    \"incidenteid\": \"{{incidenteid}}\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/v1/comment/incident",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"v1",
-						"comment",
-						"incident"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "PRUEBA_incident_comment",
 			"event": [
 				{
@@ -947,8 +895,8 @@
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
 							"    pm.expect(json.comentarioid).to.not.eql(null);\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
-							"    pm.expect(json.incidente).to.eql(pm.collectionVariables.get(\"incidenteid\"));\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.incidente).to.not.eql(null);\r",
 							"    pm.expect(json.contenido).to.eql(\"Este es un poderosisimo comentario. Patrocinado por ECdB.\");\r",
 							"    pm.expect(json.likes).to.eql(0);\r",
 							"});\r",
@@ -1018,7 +966,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"comentarioid\": \"{{commentid}}\",\r\n    \"incidenteid\": \"{{incidenteid}}\"\r\n}",
+					"raw": "{\r\n    \"comentarioid\": \"{{commentid}}\",\r\n    \"estatus\": \"reportado\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1071,7 +1019,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"comentarioid\": \"{{commentid}}\",\r\n    \"incidenteid\": \"{{incidenteid}}\"\r\n}",
+					"raw": "{\r\n    \"comentarioid\": \"{{commentid}}\",\r\n    \"estatus\": \"reportado\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1112,8 +1060,8 @@
 							"\r",
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
 							"    pm.expect(json.comentarioid).to.not.eql(null);\r",
-							"    pm.expect(json.clienteid).to.eql(pm.collectionVariables.get(\"clienteid\"));\r",
-							"    pm.expect(json.incidente).to.eql(pm.collectionVariables.get(\"incidenteid\"));\r",
+							"    pm.expect(json.clienteid).to.not.eql(null);\r",
+							"    pm.expect(json.incidente).to.not.eql(null);\r",
 							"    pm.expect(json.contenido).to.eql(\"Este es otro comentario patrocinado por Team Cherry, para promocionar SILSON.\");\r",
 							"    pm.expect(json.likes).to.eql(0);\r",
 							"});"
@@ -1145,65 +1093,6 @@
 					"path": [
 						"v1",
 						"comment"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PRUEBA_comment_incident",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// JSON de respuesta\r",
-							"var json = pm.response.json();\r",
-							"\r",
-							"// --- TESTS ---\r",
-							"pm.test(\"TEST: Código de estado: 200\", function () {\r",
-							"    pm.response.to.not.be.error;\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"TEST: Integridad de llaves\", function () {\r",
-							"    require('lodash').each((json.data), (comment)=>{\r",
-							"        pm.expect(comment.to.have.property(\"comentarioid\"));\r",
-							"        pm.expect(comment.to.have.property(\"clienteid\"));\r",
-							"        pm.expect(incidente.to.be(pm.collectionVariables.get(\"incidenteid\")));\r",
-							"        pm.expect(comment.to.have.property(\"contenido\"));\r",
-							"        pm.expect(comment.to.have.property(\"likes\"));\r",
-							"    });\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"comentarioid\": \"0\",\r\n    \"incidenteid\": \"{{incidenteid}}\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/v1/comment/incident",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"v1",
-						"comment",
-						"incident"
 					]
 				}
 			},
@@ -1246,8 +1135,21 @@
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -1293,15 +1195,15 @@
 							"pm.test(\"TEST: Comprobación consistencia\", function () {\r",
 							"    pm.expect(json.incidenteid).to.not.eql(null);\r",
 							"    pm.expect(json.clienteid).to.not.eql(null);\r",
-							"    //pm.expect(json.categoriaid).to.eql(246832);\r",
+							"    pm.expect(json.categoriaid).to.eql(246832);\r",
 							"    pm.expect(json.nombre).to.eql(\"Bache\");\r",
 							"    pm.expect(json.descripcion).to.eql(\"Bache C. Silson, Esq. Jolounai\");\r",
 							"    pm.expect(json.fecha).to.eql(\"2025-02-12\");\r",
 							"    pm.expect(json.hora).to.eql(\"15:30:00\");\r",
 							"    pm.expect(json.latitud).to.eql(19.566688);\r",
 							"    pm.expect(json.longitud).to.eql(99.138437);\r",
-							"    //pm.expect(json.estado).to.eql(\"en revision\");\r",
-							"    pm.expect(json.to.have.property(\"likes\"));\r",
+							"    pm.expect(json.estado).to.eql(\"en revision\");\r",
+							"    pm.expect(incidente.to.have.property(\"likes\"));\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1324,7 +1226,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"en revision\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1450,6 +1352,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -1489,7 +1401,9 @@
 							"    pm.response.to.not.be.error;\r",
 							"    pm.response.to.have.status(200);\r",
 							"    pm.response.text().localeCompare(\"1\");\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.collectionVariables.unset(\"incidenteid\")"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -1511,7 +1425,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"resuelto\"\r\n}",
+					"raw": "{\r\n    \"token\" : \"{{token}}\",\r\n    \"incidenteid\" : \"{{incidenteid}}\",\r\n    \"estatus\" : \"resuelto\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2015,7 +1929,11 @@
 							"    pm.response.to.not.be.error;\r",
 							"    pm.response.to.have.status(200);\r",
 							"    pm.response.text().localeCompare(\"1\");\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.collectionVariables.unset(\"contraseña\")\r",
+							"pm.collectionVariables.unset(\"correo\")\r",
+							"pm.collectionVariables.unset(\"token\")"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -2072,7 +1990,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"correo\" : \"{{correouser1}}\",\r\n    \"password\" : \"{{passworduser1}}\"\r\n}",
+					"raw": "{\r\n    \"correo\" : \"{{correoTEMP}}\",\r\n    \"password\" : \"{{contraseñaTEMP}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2109,6 +2027,10 @@
 							"    pm.response.text().localeCompare(\"1\");\r",
 							"});\r",
 							"\r",
+							"pm.collectionVariables.unset(\"contraseñaTEMP\")\r",
+							"pm.collectionVariables.unset(\"correoTEMP\")\r",
+							"pm.collectionVariables.unset(\"tokenTEMP\")\r",
+							"\r",
 							"pm.variables.clear();"
 						],
 						"type": "text/javascript",
@@ -2121,7 +2043,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"password\": \"{{passworduser1}}\",\r\n  \"correo\": \"{{correouser1}}\",\r\n  \"token\": \"{{token}}\"\r\n}",
+					"raw": "{\r\n  \"password\": \"{{contraseñaTEMP}}\",\r\n  \"correo\": \"{{correoTEMP}}\",\r\n  \"token\": \"{{token}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
