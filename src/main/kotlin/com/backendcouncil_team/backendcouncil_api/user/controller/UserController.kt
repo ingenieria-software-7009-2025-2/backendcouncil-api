@@ -20,13 +20,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
  * Controlador para gestionar las operaciones relacionadas con los clientes/usuarios.
  * @property UserService Instancia de una clase de servicio dedicada a usuarios.
  */
+@Tag(name = "users", description = "Operaciones relacionadas con usuarios.")
 @Controller
 @RequestMapping("/v1/users")
-@Tag(
-    name = "users",
-    description = "Operaciones relacionadas con usuarios."
-)
-
 class UserController(var userService: UserService) {
 
     /**
@@ -38,32 +34,16 @@ class UserController(var userService: UserService) {
         summary = "Registra un usuario",
         description = "Usando los datos brindados, registra un usuario.",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Usuario registrado",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "406",
-                description = "usuario existente",
-                content = [Content()]
-            ),ApiResponse(
-                responseCode = "407",
-                description = "correo existente",
-                content = [Content()]
-            ),ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Usuario registrado", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "406", description = "usuario existente", content = [Content()]),
+            ApiResponse(responseCode = "407", description = "correo existente", content = [Content()]),
+            ApiResponse(responseCode = "400", description = "Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @PostMapping
     fun addUser(@RequestBody userBody: UserBody): ResponseEntity<Any> {
-        // Convertir los datos del request a un objeto del dominio
         val usuario = Usuario(
             nombre = userBody.nombre,
             apPaterno = userBody.apPaterno,
@@ -90,21 +70,9 @@ class UserController(var userService: UserService) {
         summary = "Regresa a todos los usuarios",
         description = "Regresa a todos los usuarios registrados",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    array = ArraySchema(
-                        schema = Schema(implementation = Usuario::class)
-                    ),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                array = ArraySchema(schema = Schema(implementation = Usuario::class)), mediaType = "aplication/json"
+            )]),
         ]
     )
     @GetMapping
@@ -121,21 +89,9 @@ class UserController(var userService: UserService) {
         summary = "Regresa a todos los usuarios",
         description = "Regresa a todos los usuarios registrados",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    array = ArraySchema(
-                        schema = Schema(implementation = Usuario::class)
-                    ),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                array = ArraySchema(schema = Schema(implementation = Usuario::class)), mediaType = "aplication/json"
+            )]),
         ]
     )
     @GetMapping("/toolkit")
@@ -152,19 +108,10 @@ class UserController(var userService: UserService) {
         summary = "Borrar una cuenta",
         description = "Usando el correo, confirmación de contraseña, y un tóken, elimina la cuenta.",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Cuenta borrada con éxito.",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Usuario no encontrado / Mal contraseña / Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Cuenta borrada con éxito.", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "400", description = "Usuario no encontrado / Mal contraseña / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @DeleteMapping
@@ -186,19 +133,10 @@ class UserController(var userService: UserService) {
         summary = "Iniciado de sesión",
         description = "Usando los datos brindados, intenta inicia sesión.",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Sesión iniciada",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "Usuario no encontrado / Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Sesión iniciada", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Usuario no encontrado / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @PostMapping("/login")
@@ -239,18 +177,10 @@ class UserController(var userService: UserService) {
         description = "Dada la sesión iniciada, cierra la sesión",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Sesión finalizada",
-                content = [Content(
-                    mediaType = "plain/text"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Sesión finalizada", content = [Content(
+                mediaType = "plain/text"
+            )]),
+            ApiResponse(responseCode = "400", description = "Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @PostMapping("/logout")
@@ -273,19 +203,10 @@ class UserController(var userService: UserService) {
         description = "Dada la sesión iniciada, obtiene su información",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "401",
-                description = "Sin autorización / Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "401", description = "Sin autorización / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @GetMapping("/me")
@@ -309,19 +230,10 @@ class UserController(var userService: UserService) {
         description = "Dada la sesión iniciada, modifica su información",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "401",
-                description = "Sin autorización / Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "401", description = "Sin autorización / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @PutMapping("/me")
@@ -354,19 +266,10 @@ class UserController(var userService: UserService) {
         summary = "Modifica el rol de un usuario",
         description = "Modifica el rol de un usuario",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "Usuario no encontrado / Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Usuario no encontrado / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @PutMapping("/toolkit")
@@ -389,19 +292,10 @@ class UserController(var userService: UserService) {
         description = "Verifica a un usuario por su contraseña.",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Autenticado",
-                content = [Content(
-                    schema = Schema(implementation = Usuario::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "401",
-                description = "Sin autorización / Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Autenticado", content = [Content(
+                schema = Schema(implementation = Usuario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "401", description = "Sin autorización / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @PostMapping("toolkit/verify-password")
@@ -422,19 +316,10 @@ class UserController(var userService: UserService) {
         summary = "Verificación de existencia de username",
         description = "Verifica si el username existe en el modelo",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    schema = Schema(implementation = Boolean::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                schema = Schema(implementation = Boolean::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "400", description = "Username no disponible / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @GetMapping("/check-username")
@@ -453,19 +338,10 @@ class UserController(var userService: UserService) {
         summary = "Verificación de existencia de mail",
         description = "Verifica si el mail existe en el modelo",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    schema = Schema(implementation = Boolean::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                schema = Schema(implementation = Boolean::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "400", description = "Username no disponible / Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @GetMapping("/check-email")

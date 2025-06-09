@@ -14,7 +14,6 @@ import jakarta.persistence.*
  * @property mail Correo electrónico del usuario.
  * @property token Tóken del usuario.
  */
-
 @Entity
 @Table(name = "cliente")
 class User constructor(

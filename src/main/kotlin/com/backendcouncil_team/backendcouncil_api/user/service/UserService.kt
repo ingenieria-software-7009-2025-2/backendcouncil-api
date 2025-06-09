@@ -128,7 +128,6 @@ class UserService(private var userRepository: UserRepository) {
      * @param password Contraseña del usuario potencial.
      * @return Dominio de usuario creado o `NULL` si no fue exitoso.
      */
-
     fun login(mail: String, password: String): Usuario? {
         val userFound = userRepository.findByEmailAndPassword(mail, password)
 
@@ -193,7 +192,6 @@ class UserService(private var userRepository: UserRepository) {
         user.token = token
         userRepository.save(user)
     }
-
 
     /**
      * Hace log-out de la cuenta activa.

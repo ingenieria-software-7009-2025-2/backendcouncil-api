@@ -1,3 +1,6 @@
+-- Creación de base de datos
+-- NOT NECESSARY
+
 CREATE DATABASE SysRep;
 CREATE USER usuario WITH ENCRYPTED PASSWORD '2009psp2';
 GRANT ALL PRIVILEGES ON SysRep TO usuario;

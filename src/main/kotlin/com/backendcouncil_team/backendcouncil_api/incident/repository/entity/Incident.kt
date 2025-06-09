@@ -7,7 +7,7 @@ import java.math.BigDecimal
 /**
 * Entidad referente a incidentes provenientes del modelo.
  * @property incidenteid ID del incidente
- * @property clienteid ID del reportador.
+ * @property clienteid ID del autor.
  * @property categoriaid ID de la categoría del incidente.
  * @property nombre Nombre del incidente.
  * @property descripcion Descripción del incidente.
@@ -16,8 +16,8 @@ import java.math.BigDecimal
  * @property latitud Latitud del incidente.
  * @property longitud Longitud del incidente.
  * @property estado Estado del incidente.
+ * @property likes Cantidad de likes del incidente.
 */
-
 @Entity
 @Table(name = "incidente")
 class Incident constructor(
