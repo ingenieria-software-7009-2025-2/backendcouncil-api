@@ -67,14 +67,29 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
 
     }
 
+    /**
+     * Función que suma un like a un incidente.
+     * @param incidenteid ID del incidente.
+     * @return Cantidad nueva de likes del incidente.
+     */
     fun like(incidenteid: Long): Int{
         return incidentRepository.giveLike(incidenteid)
     }
 
+    /**
+     * Función que resta un like a un incidente.
+     * @param incidenteid ID del incidente.
+     * @return Cantidad nueva de likes del incidente.
+     */
     fun dislike(incidenteid: Long): Int{
         return incidentRepository.stoleLike(incidenteid)
     }
 
+    /**
+     * Función que regresa todos los incidentes relacionados con un autor.
+     * @param cliente ID del cliente autor.
+     * @return Lista de incidentes relacionados con el autor.
+     */
     fun getUsr(cliente: Long):List<Incidente>{
         val lista = incidentRepository.findByClienteId(cliente)
         val respuesta : MutableList<Incidente> = mutableListOf()
@@ -85,6 +100,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return respuesta
 
     }
+
     /**
      * Función que obtiene un incidente por su ID.
      * @param id ID del incidente a buscar.
@@ -127,6 +143,11 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         return null
     }
 
+    /**
+     * Función que realiza una audición de cadena a enum con los estados de un incidente.
+     * @param estado Cadena de texto que guarda el contenido del estado del incidente.
+     * @return Estado correspondiente o `reportado` como default.
+     */
     fun castEnum(estado: String): Estado {
         if (estado.equals("reportado", true)) {
             return Estado.reportado
@@ -137,6 +158,7 @@ class IncidentService(private val incidentRepository: IncidentRepository) {
         }
         return Estado.reportado
     }
+
     /**
      * Función que elimina un incidente por su ID.
      * @param id ID del incidente a eliminar.

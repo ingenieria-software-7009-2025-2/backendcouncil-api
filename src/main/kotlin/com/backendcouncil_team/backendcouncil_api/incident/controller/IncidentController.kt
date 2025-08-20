@@ -1,6 +1,7 @@
 package com.backendcouncil_team.backendcouncil_api.incident.controller
 
 
+import com.backendcouncil_team.backendcouncil_api.coments.domain.Comentario
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.GetBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.IncidentBody
 import com.backendcouncil_team.backendcouncil_api.incident.controller.body.UpdateBody
@@ -24,12 +25,9 @@ import org.springframework.web.bind.annotation.*
  * @property incidentService
  * @property userService
  */
+@Tag(name = "incident", description = "Operaciones relacionadas con incidentes.")
 @Controller
 @RequestMapping("/v1/incident")
-@Tag(
-    name = "incident",
-    description = "Operaciones relacionadas con incidentes."
-)
 class IncidentController(var incidentService: IncidentService,var userService: UserService) {
 
     /**
@@ -42,23 +40,12 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         description = "Usando los datos brindados, registra un incidente.",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Incidente registrado",
-                content = [Content(
-                    schema = Schema(implementation = Incidente::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Incidente registrado", content = [Content(
+                schema = Schema(implementation = Incidente::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Ocurrió un error inesperado", content = [Content()]),
         ]
-
     )
-
     @PostMapping
     fun addIncident(@RequestHeader("Authorization") token: String, @RequestBody incidentBody: IncidentBody ): ResponseEntity<Incidente> {
         println(incidentBody.toString())
@@ -87,6 +74,21 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         } else return ResponseEntity.notFound().build()
     }
 
+    /**
+     * Endpoint para sumar un like a un incidente.
+     * @param updateBody Datos suficientes para la localización del incidente.
+     * @return ResponseEntity con la respuesta del servicio, 404 si no se encuentra.
+     */
+    @Operation(
+        summary = "Likea un incidente.",
+        description = "Suma un like a un incidente.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Like registrado.", content = [Content(
+                schema = Schema(implementation = Comentario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Incidente no encontrado / Ocurrió un error inesperado", content = [Content()]),
+        ]
+    )
     @PutMapping("/like")
     fun likeIncidente(@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
         val result = incidentService.like(updateBody.incidenteid!!)
@@ -97,7 +99,21 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         return ResponseEntity.notFound().build()
     }
 
-
+    /**
+     * Endpoint para restar un like a un incidente.
+     * @param updateBody Datos suficientes para la localización del incidente.
+     * @return ResponseEntity con la respuesta del servicio, 404 si no se encuentra.
+     */
+    @Operation(
+        summary = "Dislikea un incidente.",
+        description = "Resta un like a un incidente.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Dislike registrado.", content = [Content(
+                schema = Schema(implementation = Comentario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Incidente no encontrado / Ocurrió un error inesperado", content = [Content()]),
+        ]
+    )
     @PutMapping("/dislike")
     fun dislikeIncidente(@RequestBody updateBody: UpdateBody): ResponseEntity<Int> {
         val result = incidentService.dislike(updateBody.incidenteid!!)
@@ -107,6 +123,7 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         }
         return ResponseEntity.notFound().build()
     }
+
     /**
      * Endpoint que regresa todos los incidentes.
      * @return ResponseEntity con la respuesta del servicio y una lista de todos los incidentes si no han ocurrido
@@ -116,21 +133,10 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         summary = "Regresa todos los incidentes",
         description = "Regresa una lista con todos los incidentes",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    array = ArraySchema(
-                        schema = Schema(implementation = Incidente::class)
-                    ),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                    array = ArraySchema(schema = Schema(implementation = Incidente::class)), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "400", description = "Ocurrió un error inesperado", content = [Content()]),
         ]
 
     )
@@ -150,24 +156,11 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         description = "Modifica datos de un incidente en específico",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operación realizada con éxito",
-                content = [Content(
-                    schema = Schema(implementation = Incidente::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "No se encontró",
-                content = [Content()]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Operación realizada con éxito", content = [Content(
+                schema = Schema(implementation = Incidente::class), mediaType = "aplication/json"
+                )]),
+            ApiResponse(responseCode = "404", description = "No se encontró", content = [Content()]),
+            ApiResponse(responseCode = "400", description = "Error inesperado", content = [Content()]),
         ]
     )
     @PutMapping("/toolkit")
@@ -190,24 +183,11 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         description = "Elimina un incidente del registro",
         security = [SecurityRequirement(name = "BearerAuth")],
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Incidente borrado con éxito.",
-                content = [Content(
-                    schema = Schema(implementation = Incidente::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "Incidente no encontrado",
-                content = [Content()]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Incidente borrado con éxito.", content = [Content(
+                schema = Schema(implementation = Incidente::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Incidente no encontrado", content = [Content()]),
+            ApiResponse(responseCode = "400", description = "Ocurrió un error inesperado", content = [Content()]),
         ]
     )
     @DeleteMapping("/toolkit")
@@ -219,6 +199,21 @@ class IncidentController(var incidentService: IncidentService,var userService: U
         return ResponseEntity.notFound().build()
     }
 
+    /**
+     * Endpoint que regresa todos los incidentes provenientes de un usuario.
+     * @param getBody Datos necesarios para la búsqueda del cliente.
+     * @return ResponseEntity con los incidentes del usuario, 404 si no se encuentra.
+     */
+    @Operation(
+        summary = "Regresa los incidentes de un usuario.",
+        description = "Regresa todos los incidentes de un usuario.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Like registrado.", content = [Content(
+                schema = Schema(implementation = Comentario::class), mediaType = "aplication/json"
+            )]),
+            ApiResponse(responseCode = "404", description = "Incidente no encontrado / Ocurrió un error inesperado", content = [Content()]),
+        ]
+    )
     @PostMapping("/user")
     fun getAllincidentsUsr(@RequestBody getBody: GetBody): ResponseEntity<List<Incidente>>{
         val response = incidentService.getUsr(getBody.clienteid)

@@ -24,13 +24,9 @@ import org.springframework.web.servlet.ModelAndView
  * Controlador para gestionar las operaciones relacionadas a fotos.
  * @property photoService Instancia de la clase servicio que contiene la lógica para las operaciones de fotos.
  */
+@Tag(name = "photo", description = "Operaciones relacionadas con las fotos de los incidentes.")
 @Controller
 @RequestMapping("/v1/photos")
-@Tag(
-    name = "photo",
-    description = "Operaciones relacionadas con las fotos de los incidentes."
-)
-
 class PhotoController(var photoService: PhotoService) {
 
     /**
@@ -42,23 +38,10 @@ class PhotoController(var photoService: PhotoService) {
         summary = "Regresa todas las fotos",
         description = "Regresa una lista con todos las fotos de un incdente",
         responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Proceso éxitoso",
-                content = [Content(
-                    array = ArraySchema(
-                        schema = Schema(implementation = Foto::class)
-                    ),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "200", description = "Proceso éxitoso", content = [Content(
+                array = ArraySchema(schema = Schema(implementation = Foto::class)), mediaType = "aplication/json"
+            )]),
         ]
-
     )
     @GetMapping
     fun getPhotos(@RequestBody photo: PhotoBody): ResponseEntity<List<Foto>> {
@@ -74,21 +57,10 @@ class PhotoController(var photoService: PhotoService) {
         summary = "Registra una foto de un incidente",
         description = "Usando los datos brindados, registra una foto de un incidente.",
         responses = [
-            ApiResponse(
-                responseCode = "201",
-                description = "Fotografía almacenada",
-                content = [Content(
-                    schema = Schema(implementation = Foto::class),
-                    mediaType = "aplication/json"
-                )]
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "Ocurrió un error inesperado",
-                content = [Content()]
-            ),
+            ApiResponse(responseCode = "201", description = "Fotografía almacenada", content = [Content(
+                schema = Schema(implementation = Foto::class), mediaType = "aplication/json"
+            )]),
         ]
-
     )
     @PostMapping
     fun addPhoto(@RequestBody photo: PhotoBody): ResponseEntity<Any>{

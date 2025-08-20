@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository
  * Interfaz que contiene las operaciones CRUD disponibles y queries para el manejo de las fotos en la base de datos.
  */
 interface PhotoRepository : CrudRepository<Photo, Long> {
+
     /**
      * Función que busca todas las fotos de un incidente.
      * @param id ID del incidente a buscar.
